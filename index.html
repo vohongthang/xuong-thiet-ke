@@ -147,6 +147,13 @@ button,input,select,textarea{font:inherit;color:inherit}
 .aihead .av{width:28px;height:28px;border-radius:8px;background:var(--head);color:#fff;display:grid;place-items:center;font-weight:800;font-size:12px}
 .aihead b{font-size:13.5px}
 .aihead small{display:block;color:var(--muted);font-size:11.5px}
+.aihead .aicfg{margin-left:auto;border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:5px 9px;font-size:12px;cursor:pointer;white-space:nowrap}
+.kf{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.kf input,.kf select{padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);font-size:13px;color:var(--ink);width:100%;min-width:0}
+.kwrap{display:flex;gap:6px}.kwrap input{flex:1}
+.kok{color:#1b7a3a}.kbad{color:#b3261e}
+.plist3{display:flex;flex-wrap:wrap;gap:6px}.plist3 button{border:1px solid var(--line);background:var(--panel2);border-radius:99px;padding:4px 10px;font-size:12px;cursor:pointer}
+.plist3 button.on{background:var(--accent);border-color:var(--accent);color:#fff}
 .msgs{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-height:120px}
 .msg{max-width:92%;padding:8px 10px;border-radius:10px;font-size:13px;white-space:pre-wrap;word-wrap:break-word}
 .msg.u{align-self:flex-end;background:var(--head);color:#fff;border-bottom-right-radius:3px}
@@ -245,7 +252,7 @@ footer a{color:var(--accent-ink)}
   </aside>
 
   <section class="ai" aria-label="Trợ lý AI thiết kế">
-    <div class="aihead"><div class="av">AI</div><div><b>Trợ lý Thiết kế</b><small id="aiMode">Đang kết nối…</small></div></div>
+    <div class="aihead"><div class="av">AI</div><div><b>Trợ lý Thiết kế</b><small id="aiMode">Đang kết nối…</small></div><button class="aicfg" id="bAiCfg" title="Chọn AI và nhập key">⚙ Cài đặt AI</button></div>
     <div class="msgs" id="msgs"></div>
     <div class="chips" id="chips"></div>
     <div class="aiopt"><span id="aiImgs"></span></div>
@@ -336,6 +343,34 @@ Võ Minh Khôi</textarea></label>
       <div class="prog" id="pProg"></div>
       <button class="btn" id="pClose">Đóng</button>
       <div class="hint">Mỗi tài khoản chỉ thấy dự án của mình. Bản nháp cũng tự lưu trên trình duyệt này.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="aiCfg" hidden>
+  <div class="mbox one" style="grid-template-columns:minmax(0,1fr);width:min(560px,100%)">
+    <div class="mside">
+      <h2>Cài đặt AI cho Trợ lý</h2>
+      <div class="hint">Dán key của bất kỳ AI nào — phần mềm tự nhận loại, tự kiểm tra và chọn model. Key chỉ lưu trên trình duyệt máy này, không gửi lên đám mây dự án.</div>
+      <label class="kf">Dán key vào đây
+        <span class="kwrap"><input type="password" id="kKey" autocomplete="off" spellcheck="false" placeholder="AIza… / sk-… / sk-ant-… / gsk_…"><button class="btn" id="kEye" type="button">👁</button></span></label>
+      <label class="kf">Nhà cung cấp
+        <select id="kProv">
+          <option value="server">Máy chủ mặc định (Gemini của chủ phần mềm)</option>
+          <option value="gemini">Google Gemini</option><option value="openai">OpenAI (ChatGPT)</option><option value="anthropic">Anthropic Claude</option>
+          <option value="openrouter">OpenRouter (nhiều model, 1 key)</option><option value="deepseek">DeepSeek</option><option value="groq">Groq</option>
+          <option value="xai">xAI Grok</option><option value="mistral">Mistral</option><option value="custom">Tùy chỉnh (tương thích OpenAI)</option>
+        </select></label>
+      <div class="hint" id="kLink"></div>
+      <label class="kf" id="kBaseW" hidden>Base URL (dạng https://…/v1)<input type="text" id="kBase" spellcheck="false" placeholder="https://…/v1"></label>
+      <label class="kf">Model
+        <select id="kModel"><option value="">Tự chọn (khuyên dùng)</option></select></label>
+      <label class="hint" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="kRemember" checked> Nhớ key trên máy này (bỏ chọn nếu dùng máy chung)</label>
+      <label class="hint" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="kFallback" checked> Khi key riêng lỗi, tự chuyển sang máy chủ mặc định</label>
+      <div class="row"><button class="btn" id="kTest">Kiểm tra &amp; tải model</button><button class="btn primary" id="kSave">Lưu &amp; dùng</button><button class="btn" id="kDel">Xóa key này</button></div>
+      <div class="prog" id="kMsg"></div>
+      <div><div class="hint" style="margin-bottom:4px">Key đã lưu (bấm để chuyển nhanh):</div><div class="plist3" id="kSaved"></div></div>
+      <button class="btn" id="kClose">Đóng</button>
     </div>
   </div>
 </div>
@@ -1025,9 +1060,11 @@ async function send(){
   const imgs=AI.imgs.slice();AI.imgs=[];$('aiImgs').textContent='';
   try{
     const tools=TOOLDEFS.filter(t=>t.name!=='get_state').map(t=>({name:t.name,description:t.description,params:t.inputSchema?t.inputSchema.properties:undefined}));
-    const r=await fetch(CFG.WORKER_URL,{method:'POST',signal:AI.ctl.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({rules:RULES(),state:getState(),tools,messages:AI.turns.slice(-12),images:imgs})});
-    const d=await r.json();
-    if(!d.ok){bubble.textContent=(d.error||'Lỗi AI')+(d.kind==='quota'?' Có thể dùng lệnh cơ bản trong lúc chờ.':'');AI.turns.pop();return;}
+    const own=KEYS.active(),payload={rules:RULES(),state:getState(),tools,messages:AI.turns.slice(-12),images:imgs};
+    const call=ai=>fetch(CFG.WORKER_URL,{method:'POST',signal:AI.ctl.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify(ai?{...payload,ai}:payload)}).then(r=>r.json());
+    let d=await call(own);
+    if(!d.ok&&own&&KEYS.cfg.fallback&&AI.server){const e1=d.error;bubble.textContent='Key riêng lỗi ('+e1+') — chuyển sang máy chủ mặc định…';d=await call(null);if(d.ok)d.reply='['+'Key riêng lỗi: '+e1+' — đã dùng máy chủ mặc định] '+d.reply;}
+    if(!d.ok){bubble.textContent=(d.error||'Lỗi AI')+(own?' (AI: '+KEYS.label(own)+'). Bấm ⚙ Cài đặt AI để đổi key/model.':'')+(d.kind==='quota'?' Có thể dùng lệnh cơ bản trong lúc chờ.':'');AI.turns.pop();return;}
     for(const x of d.actions||[]){try{runTool(x.tool,x.args);acts.push(x.tool);}catch(e){acts.push(x.tool+' ✗');}}
     bubble.textContent=d.reply||'Đã xong.';
     if(acts.length){const a=document.createElement('div');a.className='acts';a.textContent='⚙ '+acts.join(' · ');bubble.appendChild(a);}
@@ -1052,13 +1089,60 @@ function offline(t){
   else if(s.includes('kiểm tra')){setDock('check');acts.push('check_print');}
   else if((s.includes('màu')||s.includes('đổi'))&&colorFrom(s)){const os=canvas.getActiveObjects().length?canvas.getActiveObjects():userObjs().filter(o=>o.text!=null);setProps(os,{fill:colorFrom(s)});acts.push('update_objects');}
   refreshAll();
-  return acts.length?'Đã làm: '+acts.join(' → ')+'.\n(Chế độ lệnh cơ bản.)':'Chế độ lệnh cơ bản chỉ hiểu vài câu: "phong cách men lam “Tên”", "logo huy hiệu “Tên”", "nền màu đỏ", "thêm chữ “…”", "căn giữa", "kiểm tra". Khi máy chủ AI hoạt động, trợ lý hiểu yêu cầu tự do.';
+  return acts.length?'Đã làm: '+acts.join(' → ')+'.\n(Chế độ lệnh cơ bản.)':'Chế độ lệnh cơ bản chỉ hiểu vài câu: "phong cách men lam “Tên”", "logo huy hiệu “Tên”", "nền màu đỏ", "thêm chữ “…”", "căn giữa", "kiểm tra". Bấm ⚙ Cài đặt AI và dán key (Gemini có gói miễn phí) để trợ lý hiểu yêu cầu tự do.';
 }
 async function initAI(){
   if(!CFG.WORKER_URL){AI.on=false;$('aiMode').textContent='Chế độ lệnh cơ bản (chưa cấu hình máy chủ AI)';addMsg('sys','Chưa cấu hình máy chủ AI. Trợ lý hiểu vài lệnh cơ bản.');return;}
-  try{const r=await fetch(CFG.WORKER_URL,{method:'GET'});const d=await r.json();AI.on=!!d.configured;$('aiMode').textContent=AI.on?'Gemini · điều khiển công cụ trên trang':'Máy chủ AI chưa có khóa Gemini — đang dùng lệnh cơ bản';}
-  catch(e){AI.on=false;$('aiMode').textContent='Không kết nối được máy chủ AI — dùng lệnh cơ bản';}
+  try{const r=await fetch(CFG.WORKER_URL,{method:'GET'});const d=await r.json();AI.server=!!d.configured;}catch(e){AI.server=false;AI.down=true;}
+  aiStatus();
 }
+function aiStatus(){const own=KEYS.active();AI.on=!AI.down&&(!!own||AI.server);
+  $('aiMode').textContent=AI.down?'Không kết nối được máy chủ AI — dùng lệnh cơ bản':own?KEYS.label(own)+' (key riêng) · điều khiển công cụ':AI.server?'Gemini máy chủ · điều khiển công cụ trên trang':'Chưa có AI — bấm ⚙ Cài đặt AI để dán key';}
+
+/* ================= CÀI ĐẶT AI: nhiều nhà cung cấp, dán key là tự nhận ================= */
+const PROVS={gemini:{n:'Gemini',link:'https://aistudio.google.com/app/apikey',free:'Có gói miễn phí.'},openai:{n:'OpenAI',link:'https://platform.openai.com/api-keys',free:'Trả phí theo lượt.'},anthropic:{n:'Claude',link:'https://console.anthropic.com/settings/keys',free:'Trả phí theo lượt.'},openrouter:{n:'OpenRouter',link:'https://openrouter.ai/keys',free:'1 key dùng nhiều hãng; có model miễn phí.'},deepseek:{n:'DeepSeek',link:'https://platform.deepseek.com/api_keys',free:'Giá rẻ.'},groq:{n:'Groq',link:'https://console.groq.com/keys',free:'Có gói miễn phí, rất nhanh.'},xai:{n:'Grok',link:'https://console.x.ai',free:'Trả phí theo lượt.'},mistral:{n:'Mistral',link:'https://console.mistral.ai/api-keys',free:'Có gói thử.'},custom:{n:'Tùy chỉnh',link:'',free:'Máy chủ tương thích OpenAI (https).'}};
+const KEYS={store:null,cfg:{provider:'server',keys:{},models:{},baseUrl:'',fallback:true,remember:true},
+  load(){for(const st of [localStorage,sessionStorage]){try{const v=st.getItem('tvwin-xtk-ai');if(v){this.cfg={...this.cfg,...JSON.parse(v)};this.store=st;return;}}catch(e){}}},
+  save(){const v=JSON.stringify(this.cfg);try{localStorage.removeItem('tvwin-xtk-ai');sessionStorage.removeItem('tvwin-xtk-ai');(this.cfg.remember?localStorage:sessionStorage).setItem('tvwin-xtk-ai',v);}catch(e){}},
+  active(){const p=this.cfg.provider;if(!p||p==='server')return null;const key=this.cfg.keys[p];if(!key)return null;return{provider:p,key,model:this.cfg.models[p]||'',baseUrl:p==='custom'?this.cfg.baseUrl:''};},
+  label(o){return (PROVS[o.provider]||{n:o.provider}).n+(o.model?' · '+o.model:'');},
+  detect(k){k=k.trim();if(/^AIza[\w-]{20,}$/.test(k))return'gemini';if(/^sk-ant-/.test(k))return'anthropic';if(/^sk-or-/.test(k))return'openrouter';if(/^gsk_/.test(k))return'groq';if(/^xai-/.test(k))return'xai';if(/^sk-(proj-|svcacct-|admin-)/.test(k))return'openai';return null;}};
+KEYS.load();
+function kSync(){const p=$('kProv').value,o=PROVS[p];$('kBaseW').hidden=p!=='custom';
+  $('kKey').value=p==='server'?'':(KEYS.cfg.keys[p]||'');
+  $('kLink').innerHTML=p==='server'?(AI.server?'Dùng key Gemini đặt trên máy chủ (Cloudflare). Không cần nhập gì.':'<span class="kbad">Máy chủ chưa có key Gemini — hãy chọn nhà cung cấp và dán key riêng.</span>'):(o.link?`Lấy key: <a href="${o.link}" target="_blank" rel="noopener">${o.link.replace('https://','')}</a> · ${o.free}`:o.free);
+  const m=KEYS.cfg.models[p]||'',sel=$('kModel');sel.innerHTML='<option value="">Tự chọn (khuyên dùng)</option>'+(m?`<option selected>${m}</option>`:'');sel.disabled=p==='server';
+  $('kBase').value=KEYS.cfg.baseUrl||'';$('kRemember').checked=KEYS.cfg.remember!==false;$('kFallback').checked=KEYS.cfg.fallback!==false;kList();}
+function kList(){const ps=Object.keys(KEYS.cfg.keys).filter(p=>KEYS.cfg.keys[p]);$('kSaved').innerHTML=['server',...ps].map(p=>`<button data-p="${p}" class="${KEYS.cfg.provider===p?'on':''}">${p==='server'?'Máy chủ':PROVS[p].n+' ••'+KEYS.cfg.keys[p].slice(-4)}</button>`).join('');}
+$('kSaved').onclick=e=>{const b=e.target.closest('button');if(!b)return;KEYS.cfg.provider=b.dataset.p;KEYS.save();$('kProv').value=b.dataset.p;kSync();aiStatus();$('kMsg').textContent='Đang dùng: '+(b.dataset.p==='server'?'máy chủ mặc định':PROVS[b.dataset.p].n);};
+$('bAiCfg').onclick=()=>{$('kProv').value=(KEYS.cfg.provider&&KEYS.cfg.provider!=='server')||AI.server?(KEYS.cfg.provider||'server'):'gemini';kSync();$('kMsg').textContent='';$('aiCfg').hidden=false;};
+$('kClose').onclick=()=>$('aiCfg').hidden=true;
+$('kEye').onclick=()=>{const i=$('kKey');i.type=i.type==='password'?'text':'password';};
+$('kProv').onchange=()=>{kSync();$('kMsg').textContent='';};
+$('kKey').addEventListener('input',()=>{const k=$('kKey').value.trim(),p=KEYS.detect(k);if(!p||k===kKeyTested)return;kKeyTested=k;if(p!==$('kProv').value){$('kProv').value=p;kSync();$('kKey').value=k;}$('kMsg').innerHTML='Nhận ra key <b>'+PROVS[p].n+'</b> — đang kiểm tra…';kTest();});
+let kKeyTested='';
+$('kKey').addEventListener('paste',()=>setTimeout(()=>{const k=$('kKey').value.trim();if(k.length>20&&!KEYS.detect(k)){if($('kProv').value==='server')$('kMsg').textContent='Chưa nhận ra loại key — chọn Nhà cung cấp rồi bấm Kiểm tra.';else kTest();}},50));
+function kForm(){const p=$('kProv').value;return{provider:p,key:$('kKey').value.trim(),model:$('kModel').value,baseUrl:$('kBase').value.trim()};}
+async function kTest(){const f=kForm();if(f.provider==='server'){$('kMsg').textContent=AI.server?'Máy chủ mặc định đang hoạt động.':'Máy chủ chưa có key.';return true;}
+  if(!f.key){$('kMsg').innerHTML='<span class="kbad">Chưa dán key.</span>';return false;}
+  if(f.provider==='custom'&&!/^https:\/\//.test(f.baseUrl)){$('kMsg').innerHTML='<span class="kbad">Nhập Base URL dạng https://…/v1</span>';return false;}
+  $('kMsg').textContent='Đang kiểm tra key…';$('kTest').disabled=true;
+  try{const r=await fetch(CFG.WORKER_URL+'/models',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ai:f})});const d=await r.json();
+    if(!d.ok){$('kMsg').innerHTML='<span class="kbad">✗ '+(d.error||'Key không dùng được')+'</span>';return false;}
+    const cur=f.model||KEYS.cfg.models[f.provider]||'',ms=d.models||[];
+    $('kModel').innerHTML='<option value="">Tự chọn (khuyên dùng)</option>'+ms.map(m=>`<option ${m===cur?'selected':''}>${m}</option>`).join('');
+    if(!cur&&ms[0])$('kModel').value=ms[0];
+    $('kMsg').innerHTML='<span class="kok">✓ Key dùng được</span> — '+ms.length+' model. Đã chọn: <b>'+($('kModel').value||'tự chọn')+'</b>. Bấm “Lưu & dùng”.';return true;}
+  catch(e){$('kMsg').innerHTML='<span class="kbad">Không kết nối được máy chủ để kiểm tra.</span>';return false;}
+  finally{$('kTest').disabled=false;}}
+$('kTest').onclick=kTest;
+$('kSave').onclick=async()=>{const f=kForm();KEYS.cfg.remember=$('kRemember').checked;KEYS.cfg.fallback=$('kFallback').checked;
+  if(f.provider!=='server'){if(!f.key){$('kMsg').innerHTML='<span class="kbad">Chưa dán key.</span>';return;}
+    if($('kModel').options.length<=2&&!(await kTest()))return;
+    KEYS.cfg.keys[f.provider]=f.key;KEYS.cfg.models[f.provider]=$('kModel').value;if(f.provider==='custom')KEYS.cfg.baseUrl=f.baseUrl;}
+  KEYS.cfg.provider=f.provider;KEYS.save();aiStatus();kList();$('aiCfg').hidden=true;
+  addMsg('sys','Đã chuyển Trợ lý sang: '+(f.provider==='server'?'máy chủ mặc định':KEYS.label(KEYS.active()))+'.');};
+$('kDel').onclick=()=>{const p=$('kProv').value;if(p==='server')return;delete KEYS.cfg.keys[p];delete KEYS.cfg.models[p];if(KEYS.cfg.provider===p)KEYS.cfg.provider='server';KEYS.save();kSync();aiStatus();$('kMsg').textContent='Đã xóa key '+PROVS[p].n+' khỏi máy này.';};
 
 /* ================= PDF / IMPOSITION / BATCH ================= */
 const PT=72/25.4;
