@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Xưởng Thiết Kế TVwin Studio</title>
+<meta name="theme-color" content="#0c3677">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Montserrat:wght@400;600;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Baloo+2:wght@500;700;800&family=Dancing+Script:wght@600;700&family=Oswald:wght@400;600&family=Lora:ital,wght@0,500;0,700;1,500&family=Pattaya&family=Nunito:wght@600;800&family=Lobster&family=Great+Vibes&family=Quicksand:wght@500;700&family=Merriweather:wght@400;700&family=Josefin+Sans:wght@400;700&family=Comfortaa:wght@500;700&family=Noto+Serif:wght@400;700&family=Bungee&family=JetBrains+Mono:wght@400;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%230c3677%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2215%22 font-family=%22Arial%22 font-weight=%22700%22 text-anchor=%22middle%22 fill=%22%23fff%22%3ET%3Ctspan fill=%22%23ff5d02%22%3EV%3C/tspan%3E%3C/text%3E%3C/svg%3E">
+<style>
+/* Layout: bàn làm việc kiểu CorelDRAW — hộp công cụ dọc trái, thanh thuộc tính trên, trang in ở giữa trên "tấm kê cắt", docker phải (Sản phẩm/Mẫu/Logo/Lớp/Kiểm tra) và khung chat Trợ lý AI */
+:root{
+  --bg:#eef1f6; --panel:#ffffff; --panel2:#f6f8fb; --ink:#16213a; --muted:#5f6b82; --line:#dde3ec;
+  --head:#0c3677; --accent:#ff5d02; --accent-ink:#b8420b; --accent-soft:#fff1e8;
+  --mat:#dfe5ee; --matline:rgba(12,54,119,.06); --matline2:rgba(12,54,119,.12);
+  --good:#1f8a4c; --warn:#b86e00; --bad:#c62f2f; --sel:#0c3677;
+  --f-ui:"Be Vietnam Pro",system-ui,"Segoe UI",Roboto,sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0b1220; --panel:#121b2e; --panel2:#18233a; --ink:#e6ebf5; --muted:#9aa6bd; --line:#26324c;
+  --head:#0a2552; --accent:#ff7a2e; --accent-ink:#ffa066; --accent-soft:#3a2416;
+  --mat:#0e1626; --matline:rgba(155,188,255,.05); --matline2:rgba(155,188,255,.1);
+  --good:#4cc283; --warn:#f0a63a; --bad:#ff6b6b; --sel:#9bbcff; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0b1220; --panel:#121b2e; --panel2:#18233a; --ink:#e6ebf5; --muted:#9aa6bd; --line:#26324c;
+  --head:#0a2552; --accent:#ff7a2e; --accent-ink:#ffa066; --accent-soft:#3a2416;
+  --mat:#0e1626; --matline:rgba(155,188,255,.05); --matline2:rgba(155,188,255,.1);
+  --good:#4cc283; --warn:#f0a63a; --bad:#ff6b6b; --sel:#9bbcff; color-scheme:dark;}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--bg);color:var(--ink)}
+html,body{margin:0}
+body{font-family:var(--f-ui);font-size:13.5px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{background:var(--head);color:#fff;display:flex;align-items:center;gap:10px;padding:8px 12px;flex-wrap:wrap}
+.mark{height:32px;padding:0 8px;border-radius:8px;background:#fff;color:#0c3677;display:flex;align-items:center;font-weight:800;white-space:nowrap}
+.mark b{color:#ff5d02}
+.top h1{font-size:15.5px;margin:0;font-weight:700;white-space:nowrap}
+.top .prod{font-size:12px;opacity:.85;font-family:var(--f-num)}
+.top .sp{flex:1}
+.tb{display:flex;gap:4px;flex-wrap:wrap}
+.tb button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:7px;padding:5px 10px;cursor:pointer;font-size:12.5px;white-space:nowrap}
+.tb button:hover{background:rgba(255,255,255,.2)}
+.tb button.cta{background:#ff5d02;border-color:#ff5d02;font-weight:600}
+
+.propbar{background:var(--panel);border-bottom:1px solid var(--line);padding:6px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-height:46px}
+.pg{display:flex;align-items:center;gap:4px;padding-right:8px;border-right:1px solid var(--line)}
+.pg:last-child{border-right:0}
+.pg label{font-size:11px;color:var(--muted);font-family:var(--f-num)}
+.pg input[type=number],.pg input[type=text]{width:64px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);font-family:var(--f-num);font-size:12px}
+.pg input[type=text].wide{width:160px;font-family:var(--f-ui)}
+.pg select{padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);font-size:12.5px;max-width:170px}
+.pg input[type=color]{width:28px;height:26px;border:1px solid var(--line);border-radius:6px;padding:1px;background:var(--panel2);cursor:pointer}
+.ib{width:28px;height:28px;display:inline-grid;place-items:center;border:1px solid var(--line);background:var(--panel2);border-radius:6px;cursor:pointer;padding:0}
+.ib svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ib[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+.ib:hover{border-color:var(--muted)}
+.swatch{width:24px;height:24px;border-radius:6px;border:1px solid var(--line);padding:0;cursor:pointer;position:relative;overflow:hidden}
+.swatch input{position:absolute;inset:-4px;opacity:0;cursor:pointer;width:40px;height:40px}
+.hint{font-size:12px;color:var(--muted)}
+
+.work{display:grid;grid-template-columns:52px minmax(0,1fr) 300px 320px;grid-template-areas:"tools stage dock ai";height:calc(100vh - 140px);min-height:560px}
+@media (max-width:1400px){.work{grid-template-columns:52px minmax(0,1fr) 330px;grid-template-areas:"tools stage dock" "tools stage ai";grid-template-rows:minmax(0,1fr) minmax(0,1fr)}}
+@media (max-width:980px){.work{grid-template-columns:minmax(0,1fr);grid-template-areas:"tools" "stage" "dock" "ai";grid-template-rows:auto 62vh auto auto;height:auto}}
+.tools{grid-area:tools;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;padding:8px 6px;align-items:center;overflow:auto}
+@media (max-width:980px){.tools{flex-direction:row;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto}}
+.tool{width:38px;height:38px;border-radius:8px;border:1px solid transparent;background:none;cursor:pointer;display:grid;place-items:center;color:var(--ink);flex:none}
+.tool svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tool:hover{background:var(--panel2)}
+.tool[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+.tools hr{width:28px;border:0;border-top:1px solid var(--line);margin:4px 0;flex:none}
+@media (max-width:980px){.tools hr{width:0;height:28px;border-top:0;border-left:1px solid var(--line);margin:0 4px}}
+
+.stage{grid-area:stage;position:relative;min-width:0;min-height:0;overflow:hidden;background-color:var(--mat);
+  background-image:linear-gradient(var(--matline2) 1px,transparent 1px),linear-gradient(90deg,var(--matline2) 1px,transparent 1px),linear-gradient(var(--matline) 1px,transparent 1px),linear-gradient(90deg,var(--matline) 1px,transparent 1px);
+  background-size:100px 100px,100px 100px,10px 10px,10px 10px}
+.stage .canvas-container{position:absolute!important;inset:0}
+.zoom{position:absolute;right:10px;bottom:34px;display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px;align-items:center}
+.zoom span{font-family:var(--f-num);font-size:12px;min-width:46px;text-align:center}
+.status{position:absolute;left:0;right:0;bottom:0;height:26px;background:var(--panel);border-top:1px solid var(--line);display:flex;gap:16px;align-items:center;padding:0 10px;font-family:var(--f-num);font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden}
+.toast{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:6px 12px;border-radius:8px;font-size:12.5px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:.95}
+
+.dock{grid-area:dock;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;min-width:0}
+.dtabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;flex:none}
+.dtabs button{flex:1 0 auto;background:none;border:0;border-bottom:2px solid transparent;padding:9px 10px;cursor:pointer;color:var(--muted);font-weight:600;font-size:12.5px}
+.dtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.dbody{padding:12px;overflow:auto;display:flex;flex-direction:column;gap:12px;min-height:0;flex:1}
+.dbody h3{margin:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.pcard{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:7px 8px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.pcard b{font-size:12.5px;font-weight:600}
+.pcard span{font-family:var(--f-num);font-size:11px;color:var(--muted)}
+.pcard[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.spec{font-family:var(--f-num);font-size:11.5px;background:var(--panel2);border-radius:8px;padding:8px 10px;line-height:1.6}
+.spec em{font-style:normal;color:var(--warn)}
+.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.f input[type=text],.f select{padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);color:var(--ink);font-size:13.5px;width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row>.f{flex:1 1 110px;min-width:0}
+.btn{border:1px solid var(--line);background:var(--panel2);border-radius:7px;padding:7px 12px;cursor:pointer;font-size:12.5px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn:disabled{opacity:.5;cursor:default}
+.styles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.scard{border:1px solid var(--line);border-radius:9px;padding:0;overflow:hidden;cursor:pointer;background:var(--panel2);text-align:left}
+.scard .sw{height:44px;display:flex}
+.scard .sw i{flex:1}
+.scard div.t{padding:6px 8px}
+.scard b{display:block;font-size:12.5px}
+.scard span{font-size:11px;color:var(--muted)}
+.logos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.lcard{border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;padding:4px;display:flex;flex-direction:column;align-items:center;gap:2px;color:#16213a;font-size:11.5px}
+.lcard img{width:100%;height:auto;display:block}
+.fonts{display:flex;flex-direction:column;gap:6px}
+.fcard{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:8px 10px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.fcard b{font-size:20px;font-weight:400;line-height:1.25;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fcard span{font-size:11px;color:var(--muted);font-family:var(--f-ui)}
+.pals{display:flex;flex-direction:column;gap:6px}
+.pal{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:8px;align-items:center;border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:6px 8px;cursor:pointer;text-align:left}
+.pal .sw{display:flex;height:22px;border-radius:5px;overflow:hidden;border:1px solid var(--line)}
+.pal .sw i{flex:1}
+.qcol{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+.qcol button{aspect-ratio:1;border-radius:6px;border:1px solid var(--line);cursor:pointer;padding:0}
+.layers{display:flex;flex-direction:column;gap:2px}
+.layer{display:grid;grid-template-columns:minmax(0,1fr) 26px 26px;gap:4px;align-items:center;padding:4px 6px;border-radius:6px;border:1px solid transparent;cursor:pointer}
+.layer:hover{background:var(--panel2)}
+.layer.on{border-color:var(--sel);background:var(--panel2)}
+.layer span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px}
+.layer small{color:var(--muted);font-family:var(--f-num);font-size:10.5px;margin-right:4px}
+.layer .ib{width:24px;height:24px}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.checks li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px;font-size:12.5px}
+.checks i{width:9px;height:9px;border-radius:50%;margin-top:5px}
+.ok i{background:var(--good)} .warn i{background:var(--warn)} .bad i{background:var(--bad)}
+
+.ai{grid-area:ai;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;min-width:0}
+@media (max-width:1400px){.ai{border-top:1px solid var(--line)}}
+.aihead{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.aihead .av{width:28px;height:28px;border-radius:8px;background:var(--head);color:#fff;display:grid;place-items:center;font-weight:800;font-size:12px}
+.aihead b{font-size:13.5px}
+.aihead small{display:block;color:var(--muted);font-size:11.5px}
+.msgs{flex:1;overflow:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-height:120px}
+.msg{max-width:92%;padding:8px 10px;border-radius:10px;font-size:13px;white-space:pre-wrap;word-wrap:break-word}
+.msg.u{align-self:flex-end;background:var(--head);color:#fff;border-bottom-right-radius:3px}
+.msg.a{align-self:flex-start;background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:3px}
+.msg.sys{align-self:center;background:none;color:var(--muted);font-size:12px;text-align:center}
+.msg .acts{margin-top:5px;font-family:var(--f-num);font-size:10.5px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 8px}
+.chips button{border:1px solid var(--line);background:var(--panel2);border-radius:99px;padding:4px 10px;font-size:11.5px;cursor:pointer;text-align:left}
+.compose{display:flex;gap:6px;padding:8px 12px 12px;border-top:1px solid var(--line);align-items:flex-end}
+.compose textarea{flex:1;resize:none;min-height:40px;max-height:120px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel2);font-size:13.5px}
+.aiopt{display:flex;gap:8px;align-items:center;padding:0 12px 6px;font-size:11.5px;color:var(--muted)}
+
+.modal{position:fixed;inset:0;background:rgba(5,12,28,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.mbox{background:var(--panel);border-radius:12px;width:min(980px,100%);max-height:calc(100vh - 32px);overflow:auto;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:0}
+@media (max-width:760px){.mbox{grid-template-columns:minmax(0,1fr)}}
+.mstage{background:linear-gradient(180deg,#f3f1ec,#e3dfd6);display:grid;place-items:center;min-height:320px;border-radius:12px 0 0 12px}
+.mstage canvas{max-width:100%;height:auto;display:block}
+.mside{padding:14px;display:flex;flex-direction:column;gap:10px}
+.mside h2{font-size:15px;margin:0}
+.rng{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted)}
+body.easy .adv{display:none!important}
+.mbox.one{grid-template-columns:minmax(0,1fr) 300px}
+.plist2{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:var(--panel2)}
+.prow b{font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prow span{font-size:11px;color:var(--muted);font-family:var(--f-num)}
+.mside textarea{width:100%;min-height:160px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);font-size:13px;resize:vertical}
+.mside input[type=number],.mside input[type=text],.mside select{padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);width:100%}
+.stat2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.stat2 div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.stat2 b{display:block;font-family:var(--f-num);font-size:16px}
+.stat2 span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.prog{font-size:12px;color:var(--accent-ink);min-height:18px}
+footer{padding:8px 12px;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--line);background:var(--panel)}
+footer a{color:var(--accent-ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="mark" aria-hidden="true">T<b>V</b>win</div>
+  <h1>Xưởng Thiết Kế Studio</h1>
+  <span class="prod" id="prodTitle"></span>
+  <span class="sp"></span>
+  <div class="tb">
+    <button id="bUndo" title="Hoàn tác (Ctrl+Z)">↶ Hoàn tác</button>
+    <button id="bRedo" title="Làm lại (Ctrl+Y)">↷ Làm lại</button>
+    <button id="bMode" title="Chuyển chế độ Dễ dùng / Nâng cao">Chế độ: Nâng cao</button>
+    <button id="bMock">Xem mockup</button>
+    <button id="bBatch">In tên hàng loạt</button>
+    <button id="bImp">Ghép khổ in</button>
+    <button id="bCloud">Dự án của tôi</button>
+    <button id="bOpen" class="adv">Mở file</button>
+    <button id="bSave" class="adv">Lưu file</button>
+    <button id="bSvg" class="adv">Xuất SVG</button>
+    <button id="bPdf">Xuất PDF in</button>
+    <button id="bPng" class="cta">Xuất PNG 300 ppi</button>
+  </div>
+  <input type="file" id="fOpen" accept=".json,application/json" hidden>
+</header>
+
+<div class="propbar" id="propbar"></div>
+
+<div class="work">
+  <nav class="tools" id="tools" aria-label="Hộp công cụ"></nav>
+  <div class="stage" id="stage">
+    <canvas id="cv"></canvas>
+    <div class="toast" id="toast"></div>
+    <div class="zoom">
+      <button class="ib" id="zOut" title="Thu nhỏ"><svg viewBox="0 0 16 16"><path d="M3 8h10"/></svg></button>
+      <span id="zVal">100%</span>
+      <button class="ib" id="zIn" title="Phóng to"><svg viewBox="0 0 16 16"><path d="M3 8h10M8 3v10"/></svg></button>
+      <button class="ib" id="zFit" title="Vừa trang (Shift+F4)"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <aside class="dock">
+    <div class="dtabs" role="tablist" id="dtabs">
+      <button role="tab" data-t="prod" aria-selected="true">Sản phẩm</button>
+      <button role="tab" data-t="style" aria-selected="false">Mẫu</button>
+      <button role="tab" data-t="logo" aria-selected="false">Logo</button>
+      <button role="tab" data-t="font" aria-selected="false">Phông</button>
+      <button role="tab" data-t="color" aria-selected="false">Màu</button>
+      <button role="tab" data-t="layer" aria-selected="false">Lớp</button>
+      <button role="tab" data-t="check" aria-selected="false">Kiểm tra</button>
+    </div>
+    <div class="dbody" id="d-prod"></div>
+    <div class="dbody" id="d-style" hidden></div>
+    <div class="dbody" id="d-logo" hidden></div>
+    <div class="dbody" id="d-font" hidden></div>
+    <div class="dbody" id="d-color" hidden></div>
+    <div class="dbody" id="d-layer" hidden></div>
+    <div class="dbody" id="d-check" hidden></div>
+  </aside>
+
+  <section class="ai" aria-label="Trợ lý AI thiết kế">
+    <div class="aihead"><div class="av">AI</div><div><b>Trợ lý Thiết kế</b><small id="aiMode">Đang kết nối…</small></div></div>
+    <div class="msgs" id="msgs"></div>
+    <div class="chips" id="chips"></div>
+    <div class="aiopt"><span id="aiImgs"></span></div>
+    <div class="compose">
+      <label class="btn" for="aiFile" title="Gửi ảnh mẫu/ảnh khách cho AI xem" style="padding:7px 9px">📎</label><input type="file" id="aiFile" accept="image/*" multiple hidden>
+      <textarea id="aiIn" rows="2" placeholder="Ví dụ: Thiết kế bộ ấm chén men lam cho thương hiệu Gốm Việt"></textarea>
+      <button class="btn primary" id="aiSend">Gửi</button>
+      <button class="btn" id="aiStop" hidden>Dừng</button>
+    </div>
+  </section>
+</div>
+<footer>Kích thước khuôn là giá trị mẫu — nhập khuôn xưởng trước khi in · Giải pháp bởi TVwin · <a href="https://thangvo.win">thangvo.win</a></footer>
+
+<div class="modal" id="mock" hidden>
+  <div class="mbox">
+    <div class="mstage"><canvas id="mcv" width="1200" height="1040"></canvas></div>
+    <div class="mside">
+      <h2>Mockup sản phẩm</h2>
+      <div class="hint" id="mockHint"></div>
+      <div class="row"><span class="hint">Màu phôi</span><input type="color" id="mColor" value="#ffffff"></div>
+      <label class="btn" for="mPhoto" style="text-align:center">Tải ảnh sản phẩm thật</label>
+      <input type="file" id="mPhoto" accept="image/*" hidden>
+      <div id="mPhotoCtl" hidden>
+        <div class="hint">Kéo thiết kế trên ảnh để đặt vị trí.</div>
+        <label class="rng">Kích thước<input type="range" id="mS" min="5" max="100" value="38"></label>
+        <label class="rng">Độ cong thân<input type="range" id="mC" min="0" max="100" value="0"></label>
+        <label class="rng">Xoay<input type="range" id="mR" min="-30" max="30" value="0"></label>
+        <label class="row hint"><input type="checkbox" id="mMul" checked> Hòa màu với phôi (multiply)</label>
+        <button class="btn" id="mClear">Bỏ ảnh, dùng hình vẽ</button>
+      </div>
+      <button class="btn primary" id="mSave">Tải ảnh mockup</button>
+      <button class="btn" id="mClose">Đóng</button>
+      <div class="hint">Mockup để khách duyệt, không thay file in phẳng.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="imp" hidden>
+  <div class="mbox one">
+    <div class="mstage"><canvas id="icv" width="1200" height="1200"></canvas></div>
+    <div class="mside">
+      <h2>Ghép khổ in</h2>
+      <div class="hint" id="impSrc"></div>
+      <label class="f">Khổ in<select id="iSheet"><option value="210x297">A4 · 210 × 297</option><option value="297x420" selected>A3 · 297 × 420</option><option value="320x450">SRA3 · 320 × 450</option><option value="650x500">Tờ 650 × 500</option><option value="600x1000">Cuộn 600 × 1000</option><option value="custom">Tùy chỉnh…</option></select></label>
+      <div class="row" id="iCustom" hidden><label class="f">Rộng mm<input type="number" id="iCW" value="330"></label><label class="f">Cao mm<input type="number" id="iCH" value="480"></label></div>
+      <div class="row"><label class="f">Lề kẹp mm<input type="number" id="iM" value="10" min="0"></label><label class="f">Khe mm<input type="number" id="iG" value="4" min="0"></label></div>
+      <label class="f" id="iQtyWrap">Số lượng cần in<input type="number" id="iQ" value="100" min="1"></label>
+      <label class="row hint"><input type="checkbox" id="iMarks" checked> Dấu cắt góc</label>
+      <div class="stat2" id="iStats"></div>
+      <div class="prog" id="iProg"></div>
+      <button class="btn primary" id="iPdf">Xuất PDF khổ in</button>
+      <button class="btn" id="iClose">Đóng</button>
+      <div class="hint">Mỗi bản giữ lề tràn của khuôn. Số tờ chưa cộng hao hụt. Tự chọn xoay 90° nếu xếp được nhiều hơn.</div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="batch" hidden>
+  <div class="mbox one">
+    <div class="mstage"><canvas id="bcv" width="1000" height="700"></canvas></div>
+    <div class="mside">
+      <h2>In tên hàng loạt</h2>
+      <div class="hint" id="bTarget"></div>
+      <label class="f">Danh sách (mỗi dòng một tên/nội dung)<textarea id="bNames">Nguyễn Văn An
+Trần Thị Bình
+Lê Hoàng Cường
+Phạm Thu Hà
+Võ Minh Khôi</textarea></label>
+      <div class="hint" id="bInfo"></div>
+      <label class="row hint"><input type="checkbox" id="bFit" checked> Tự thu nhỏ tên dài cho vừa khung cũ</label>
+      <div class="prog" id="bProg"></div>
+      <button class="btn primary" id="bPdfOut">Xuất PDF – mỗi tên 1 trang</button>
+      <button class="btn" id="bToImp">Ghép các tên lên khổ in</button>
+      <button class="btn" id="bClose">Đóng</button>
+      <div class="hint">Chọn dòng chữ cần thay trên trang trước khi mở, hoặc viết <b>{ten}</b> trong chữ để chỉ thay đúng chỗ đó.</div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="proj" hidden>
+  <div class="mbox one" style="grid-template-columns:minmax(0,1fr)">
+    <div class="mside">
+      <h2>Dự án của tôi</h2>
+      <div class="hint" id="pState">Đang kết nối…</div>
+      <div id="pAuth" hidden><div class="row"><label class="f">Email<input type="text" id="pEmail" autocomplete="email" inputmode="email"></label><label class="f">Mật khẩu<input type="password" id="pPw" autocomplete="current-password" style="padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--panel2);width:100%"></label></div>
+        <div class="row" style="margin-top:8px"><button class="btn primary" id="pLogin">Đăng nhập</button><button class="btn" id="pSignup">Tạo tài khoản</button></div></div>
+      <div id="pMain" hidden><div class="row"><span class="hint">Tài khoản: <b id="pWho"></b></span><button class="btn" id="pOut">Đăng xuất</button></div>
+        <div class="row" style="margin-top:8px"><label class="f" style="flex:2">Tên dự án<input type="text" id="pName" value="Bộ ấm chén Gốm Việt"></label><button class="btn primary" id="pSave" style="align-self:flex-end">Lưu lên đám mây</button><button class="btn" id="pNew" style="align-self:flex-end">Lưu thành dự án mới</button></div>
+        <div class="plist2" id="pList" style="margin-top:8px"></div></div>
+      <div class="prog" id="pProg"></div>
+      <button class="btn" id="pClose">Đóng</button>
+      <div class="hint">Mỗi tài khoản chỉ thấy dự án của mình. Bản nháp cũng tự lưu trên trình duyệt này.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= CẤU HÌNH (khóa công khai — an toàn để trong code) ================= */
+const CFG={WORKER_URL:'/api',SUPABASE_URL:'',SUPABASE_KEY:''};
+const CFG_READY=fetch('/api/config').then(r=>r.json()).then(d=>{if(d&&d.ok){CFG.SUPABASE_URL=d.supabaseUrl||'';CFG.SUPABASE_KEY=d.supabaseKey||'';}}).catch(()=>{});
+/* ================= DATA ================= */
+const S=4; /* canvas units per mm */
+const PRODUCTS=[
+ {id:'mug',g:'Gốm sứ',name:'Cốc sứ 11oz',w:200,h:85,bleed:2,safe:5,mock:'mug',tech:'In chuyển nhiệt lên cốc phủ coating, hoặc decal gốm nung. Vùng in quấn quanh thân.'},
+ {id:'teapot',g:'Gốm sứ',name:'Ấm trà – thân',w:150,h:75,bleed:2,safe:5,mock:'teapot',tech:'Decal gốm (in decal rồi dán, nung) hoặc in UV. Thân ấm cong, tránh chi tiết nhỏ ở mép.'},
+ {id:'teacup',g:'Gốm sứ',name:'Chén trà – thân',w:180,h:38,bleed:2,safe:4,mock:'teacup',tech:'Decal gốm nung. Dải trang trí quanh thân chén; chén loe nên dải hơi cong.'},
+ {id:'vase',g:'Gốm sứ',name:'Bình hoa – thân',w:160,h:210,bleed:2,safe:8,mock:'vase',tech:'Decal gốm hoặc vẽ/in men. Thân bầu: hình ở giữa ít biến dạng nhất.'},
+ {id:'kettle',g:'Gốm sứ',name:'Bình / ấm nước',w:190,h:110,bleed:2,safe:6,mock:'kettle',tech:'Decal gốm, in UV hoặc in chuyển nhiệt tùy chất liệu bình.'},
+ {id:'plate',g:'Gốm sứ',name:'Đĩa sứ Ø200',w:200,h:200,shape:'circle',bleed:2,safe:10,mock:'plate',tech:'Decal gốm nung hoặc in chuyển nhiệt đĩa phủ coating.'},
+ {id:'milktea',g:'Đồ uống',name:'Cốc trà sữa (trải phẳng)',w:280,h:120,bleed:3,safe:5,mock:'cup',tech:'In offset/flexo khuôn quạt cho cốc giấy; in lụa/in cong cho cốc nhựa.'},
+ {id:'glass',g:'Đồ uống',name:'Ly thủy tinh',w:150,h:80,bleed:0,safe:5,mock:'glass',tech:'In lụa nhiệt, decal hoặc in UV. Nên ít màu.'},
+ {id:'tshirt',g:'May mặc & túi',name:'Áo thun – ngực',w:280,h:340,bleed:0,safe:10,mock:'tshirt',tech:'DTF, chuyển nhiệt (áo polyester) hoặc in lụa.'},
+ {id:'tote',g:'May mặc & túi',name:'Túi vải canvas',w:280,h:300,bleed:0,safe:12,mock:'tote',tech:'In lụa hoặc DTF.'},
+ {id:'coat',g:'May mặc & túi',name:'Áo mưa – lưng',w:300,h:340,bleed:0,safe:15,mock:'coat',tech:'In lụa 1–2 màu lên vải nhựa.'},
+ {id:'helmet',g:'May mặc & túi',name:'Mũ bảo hiểm – decal',w:130,h:62,radius:10,bleed:2,safe:4,mock:'helmet',tech:'In decal rồi cắt bế theo viền.'},
+ {id:'label',g:'Ấn phẩm',name:'Tem tròn Ø50',w:50,h:50,shape:'circle',bleed:2,safe:3,mock:'label',tech:'In decal giấy/nhựa, cắt bế tròn.'},
+ {id:'card',g:'Ấn phẩm',name:'Danh thiếp',w:90,h:54,bleed:2,safe:4,mock:'card',tech:'In offset/kỹ thuật số, PDF CMYK, xén theo đường cắt.'},
+ {id:'box',g:'Ấn phẩm',name:'Nắp hộp quà',w:200,h:200,bleed:3,safe:8,mock:'box',tech:'In offset hoặc decal dán nắp.'}
+];
+const FONTS=['Be Vietnam Pro','Montserrat','Quicksand','Josefin Sans','Nunito','Comfortaa','Playfair Display','Lora','Merriweather','Noto Serif','Oswald','Bungee','Baloo 2','Lobster','Pattaya','Dancing Script','Great Vibes'];
+const FONT_KIND={'Be Vietnam Pro':'Hiện đại','Montserrat':'Hiện đại','Quicksand':'Mềm mại','Josefin Sans':'Thanh lịch','Nunito':'Tròn','Comfortaa':'Tròn','Playfair Display':'Sang trọng','Lora':'Cổ điển','Merriweather':'Cổ điển','Noto Serif':'Trang trọng','Oswald':'Đậm hẹp','Bungee':'Biển hiệu','Baloo 2':'Dễ thương','Lobster':'Nghệ thuật','Pattaya':'Nghệ thuật','Dancing Script':'Viết tay','Great Vibes':'Viết tay bay bướm'};
+const PALETTES=[['Men lam','#f7f3e8','#1f3f8f','#5d7cc4','#d9a33a'],['Đỏ son – vàng','#fbf3e4','#a3271f','#d9a33a','#5b1410'],['Navy – vàng đồng','#13294b','#c8a24a','#e8d9a8','#f4ead0'],['Trà xanh','#f3f7ee','#3f6b3a','#9cbf6b','#2b3a22'],['Pastel hồng','#fff4f6','#e86a8c','#7cc9b8','#7a2b45'],['Cà phê','#efe3c8','#5a3e2b','#a0522d','#3f2a1c'],['Tím trà sữa','#faf6ff','#7a3e9d','#f2b134','#3d1f52'],['Đen – cam TVwin','#ffffff','#111111','#ff5d02','#0c3677'],['Biển xanh','#eef7fb','#0f6e8c','#4fb3c8','#0b3b4a'],['Hồng đất','#f8efe9','#b5654a','#e2b49a','#4a2a20']];
+const QUICK=['#111111','#ffffff','#1f3f8f','#0c3677','#a3271f','#c62828','#ff5d02','#f2b134','#c8a24a','#3f6b3a','#2e7d32','#0f6e8c','#7a3e9d','#e86a8c','#5a3e2b','#7a8394'];
+const STYLES={
+ sangtrong:{name:'Sang trọng',note:'Navy – vàng đồng, chữ serif',bg:'#13294b',c1:'#c8a24a',c2:'#e8d9a8',ink:'#f4ead0',disp:'Playfair Display',body:'Lora'},
+ truyenthong:{name:'Truyền thống Việt',note:'Đỏ son – vàng, mây và sen',bg:'#fbf3e4',c1:'#a3271f',c2:'#d9a33a',ink:'#5b1410',disp:'Dancing Script',body:'Lora'},
+ menlam:{name:'Gốm men lam',note:'Lam cobalt trên nền ngà',bg:'#f7f3e8',c1:'#1f3f8f',c2:'#5d7cc4',ink:'#1a2f66',disp:'Playfair Display',body:'Be Vietnam Pro'},
+ toigian:{name:'Tối giản hiện đại',note:'Đen trắng, một màu nhấn',bg:'#ffffff',c1:'#111111',c2:'#ff5d02',ink:'#111111',disp:'Montserrat',body:'Be Vietnam Pro'},
+ dethuong:{name:'Dễ thương',note:'Pastel, bo tròn',bg:'#fff4f6',c1:'#e86a8c',c2:'#7cc9b8',ink:'#7a2b45',disp:'Baloo 2',body:'Nunito'},
+ vintage:{name:'Cổ điển',note:'Nâu – kem, huy hiệu',bg:'#efe3c8',c1:'#5a3e2b',c2:'#a0522d',ink:'#3f2a1c',disp:'Oswald',body:'Lora'}
+};
+const LOGOS=[{id:'badge',name:'Huy hiệu tròn'},{id:'shield',name:'Khiên chữ lồng'},{id:'lotus',name:'Biểu tượng sen'},{id:'hex',name:'Lục giác'},{id:'script',name:'Chữ ký'},{id:'stamp',name:'Tem chữ nhật'}];
+const PROPS=['id','name','data','selectable','evented','hoverCursor','lockMovementX','lockMovementY','lockScalingX','lockScalingY','lockRotation','hasControls'];
+const ICON={
+ select:'<path d="M5 3l12 8-5 1.5L9.5 18z"/>',
+ hand:'<path d="M7 11V5.5a1.5 1.5 0 013 0V10m0-5.5V4a1.5 1.5 0 013 0v6m0-4.5a1.5 1.5 0 013 0V13c0 3-2 5-5 5h-1c-2.5 0-3.5-1-5-3l-2-3a1.4 1.4 0 012.2-1.7L7 12"/>',
+ rect:'<rect x="3.5" y="5" width="13" height="10" rx="1"/>',
+ ellipse:'<ellipse cx="10" cy="10" rx="7" ry="5.5"/>',
+ polygon:'<path d="M10 3l6.5 4.7-2.5 7.8H6L3.5 7.7z"/>',
+ star:'<path d="M10 2.8l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L2.8 8.1l5-.7z"/>',
+ line:'<path d="M4 16L16 4"/>',
+ pen:'<path d="M3 17c3-1 4-4 6-6s5-3 8-6"/><circle cx="16.5" cy="4.5" r="1"/>',
+ text:'<path d="M4 5V3.5h12V5M10 3.5V17M7.5 17h5"/>',
+ arc:'<path d="M3 13a7 7 0 0114 0"/><path d="M7 16h6"/>',
+ image:'<rect x="3" y="4" width="14" height="12" rx="1.5"/><circle cx="7.5" cy="8" r="1.5"/><path d="M3.5 15l4.5-4 3 3 2-2 3.5 3.5"/>',
+ aL:'<path d="M2.5 2v12M5 4.5h8M5 9.5h5"/>',aC:'<path d="M8 2v12M3.5 4.5h9M5.5 9.5h5"/>',aR:'<path d="M13.5 2v12M3 4.5h8M6 9.5h5"/>',
+ aT:'<path d="M2 2.5h12M4.5 5v8M9.5 5v5"/>',aM:'<path d="M2 8h12M4.5 3.5v9M9.5 5.5v5"/>',aB:'<path d="M2 13.5h12M4.5 3v8M9.5 6v5"/>',
+ front:'<rect x="6" y="6" width="8" height="8"/><path d="M2 10V2h8"/>',back:'<rect x="2" y="2" width="8" height="8"/><path d="M14 6v8H6"/>',
+ group:'<rect x="2" y="2" width="12" height="12" stroke-dasharray="2 2"/><rect x="4.5" y="4.5" width="4" height="4"/><rect x="8" y="8" width="3.5" height="3.5"/>',
+ ungroup:'<rect x="2" y="2" width="5.5" height="5.5"/><rect x="8.5" y="8.5" width="5.5" height="5.5"/>',
+ dup:'<rect x="5" y="5" width="9" height="9" rx="1"/><path d="M2 11V3a1 1 0 011-1h8"/>',del:'<path d="M3 4.5h10M6 4.5V3h4v1.5M4.5 4.5l.7 9h5.6l.7-9"/>',
+ flipH:'<path d="M8 2v12M6 4L2 8l4 4zM10 4l4 4-4 4z"/>',flipV:'<path d="M2 8h12M4 6l4-4 4 4zM4 10l4 4 4-4z"/>',
+ lock:'<rect x="3.5" y="7" width="9" height="7" rx="1"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>',unlock:'<rect x="3.5" y="7" width="9" height="7" rx="1"/><path d="M5.5 7V5a2.5 2.5 0 014.8-1"/>',
+ eye:'<path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/>',eyeoff:'<path d="M2 2l12 12M6.5 4C7 3.7 7.5 3.5 8 3.5c4 0 6.5 4.5 6.5 4.5l-1.6 2M10 12.2c-.6.2-1.3.3-2 .3-4 0-6.5-4.5-6.5-4.5L3.3 6"/>',
+ bold:'<path d="M4.5 3h4a2.5 2.5 0 010 5h-4zM4.5 8h5a2.5 2.5 0 010 5h-5z" stroke-width="2"/>',ital:'<path d="M7 3h5M4 13h5M9.5 3l-3 10"/>',
+ tL:'<path d="M2 4h12M2 7h8M2 10h12M2 13h8"/>',tC:'<path d="M2 4h12M4 7h8M2 10h12M4 13h8"/>',tR:'<path d="M2 4h12M6 7h8M2 10h12M6 13h8"/>',
+ ratio:'<path d="M5 5.5a3 3 0 010 5M11 5.5a3 3 0 000 5M5.5 8h5"/>'
+};
+const svg=(k,vb='0 0 16 16')=>`<svg viewBox="${vb}" aria-hidden="true">${ICON[k]}</svg>`;
+
+/* ================= STATE ================= */
+let prod=PRODUCTS[0], board=null, tool='select', restoring=false, exporting=false, lockRatio=true;
+let hist=[], hIdx=-1, idSeq=1, drag=null, pan=null, spaceDown=false, dockTab='prod';
+const $=id=>document.getElementById(id);
+const W=()=>prod.w*S, H=()=>prod.h*S;
+const mm=v=>Math.round(v/S*10)/10;
+const nid=()=>'o'+(idSeq++);
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1800);}
+function hex(c){try{if(!c||typeof c!=='string'||c==='transparent')return null;return '#'+new fabric.Color(c).toHex().toLowerCase();}catch(e){return null;}}
+function initials(t){const w=String(t||'').trim().split(/\s+/).filter(Boolean);if(!w.length)return'TV';return (w.length>1?w[0][0]+w[w.length-1][0]:w[0].slice(0,2)).toUpperCase();}
+
+/* ================= CANVAS ================= */
+const canvas=new fabric.Canvas('cv',{preserveObjectStacking:true,backgroundColor:null,stopContextMenu:true,fireRightClick:false,selectionColor:'rgba(255,93,2,.08)',selectionBorderColor:'#ff5d02'});
+fabric.Object.prototype.set({cornerColor:'#ffffff',cornerStrokeColor:'#0c3677',borderColor:'#0c3677',cornerStyle:'rect',transparentCorners:false,cornerSize:9,borderScaleFactor:1.2});
+fabric.Object.NUM_FRACTION_DIGITS=3;
+function boardObj(){return canvas.getObjects().find(o=>o.name==='__board');}
+function userObjs(){return canvas.getObjects().filter(o=>o.name!=='__board');}
+function makeBoard(fill){
+  const old=boardObj();if(old)canvas.remove(old);
+  const o={left:0,top:0,fill:fill||'#ffffff',selectable:false,evented:false,name:'__board',hoverCursor:'default',strokeWidth:0,objectCaching:false};
+  board=prod.shape==='circle'?new fabric.Circle({...o,radius:W()/2}):new fabric.Rect({...o,width:W(),height:H(),rx:(prod.radius||0)*S,ry:(prod.radius||0)*S});
+  canvas.insertAt(board,0);
+}
+function boardPath(ctx,inset,keep){
+  const w=W(),h=H(),i=inset*S;if(!keep)ctx.beginPath();
+  if(prod.shape==='circle'){ctx.moveTo(w/2+Math.max(1,w/2-i),h/2);ctx.arc(w/2,h/2,Math.max(1,w/2-i),0,Math.PI*2);}
+  else{const r=Math.max(0,(prod.radius||0)*S-i*.5);const x=i,y=i,ww=w-2*i,hh=h-2*i;ctx.moveTo(x+r,y);ctx.arcTo(x+ww,y,x+ww,y+hh,r);ctx.arcTo(x+ww,y+hh,x,y+hh,r);ctx.arcTo(x,y+hh,x,y,r);ctx.arcTo(x,y,x+ww,y,r);ctx.closePath();}
+}
+canvas.on('before:render',({ctx})=>{
+  if(exporting||!ctx)return;const v=canvas.viewportTransform;ctx.save();ctx.transform(v[0],v[1],v[2],v[3],v[4],v[5]);
+  ctx.shadowColor='rgba(10,20,40,.25)';ctx.shadowBlur=18*v[0]*.3+6;ctx.shadowOffsetY=3;ctx.fillStyle='#ffffff';boardPath(ctx,0);ctx.fill();ctx.restore();
+});
+canvas.on('after:render',({ctx})=>{
+  if(exporting||!ctx)return;const v=canvas.viewportTransform,z=v[0];ctx.save();ctx.transform(v[0],v[1],v[2],v[3],v[4],v[5]);
+  const big=1e5;ctx.beginPath();ctx.rect(-big,-big,2*big,2*big);boardPath(ctx,-(prod.bleed||0),true);
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--mat').trim()||'#dfe5ee';ctx.globalAlpha=.6;ctx.fill('evenodd');ctx.globalAlpha=1;
+  ctx.lineWidth=1/z;
+  if(prod.bleed){ctx.strokeStyle='rgba(230,0,126,.55)';ctx.setLineDash([4/z,3/z]);boardPath(ctx,-prod.bleed);ctx.stroke();}
+  ctx.setLineDash([]);ctx.strokeStyle='rgba(22,33,58,.55)';boardPath(ctx,0);ctx.stroke();
+  ctx.strokeStyle='rgba(0,150,199,.8)';ctx.setLineDash([5/z,4/z]);boardPath(ctx,prod.safe||0);ctx.stroke();ctx.setLineDash([]);
+  if(drag&&drag.box){const b=drag.box;ctx.strokeStyle='#ff5d02';ctx.lineWidth=1.5/z;ctx.setLineDash([4/z,3/z]);
+    if(drag.kind==='ellipse'){ctx.beginPath();ctx.ellipse(b.x+b.w/2,b.y+b.h/2,Math.max(1,b.w/2),Math.max(1,b.h/2),0,0,Math.PI*2);ctx.stroke();}
+    else if(drag.kind==='line'){ctx.beginPath();ctx.moveTo(drag.x0,drag.y0);ctx.lineTo(drag.x1,drag.y1);ctx.stroke();}
+    else ctx.strokeRect(b.x,b.y,b.w,b.h);ctx.setLineDash([]);}
+  ctx.restore();
+});
+function fitPage(){
+  const el=$('stage'),cw=el.clientWidth,ch=el.clientHeight-26,pad=Math.min(70,cw*.08);const bw=W()+2*(prod.bleed||0)*S,bh=H()+2*(prod.bleed||0)*S;
+  fitted=true;const z=Math.max(.05,Math.min((cw-2*pad)/bw,(ch-2*pad)/bh));canvas.setViewportTransform([z,0,0,z,(cw-W()*z)/2,(ch-H()*z)/2]);updZoom();
+}
+function sizeCanvas(){const el=$('stage');canvas.setDimensions({width:el.clientWidth,height:el.clientHeight-26});canvas.requestRenderAll();}
+let fitted=true;
+new ResizeObserver(()=>{sizeCanvas();if(fitted)fitPage();}).observe($('stage'));
+function updZoom(){$('zVal').textContent=Math.round(canvas.getZoom()*100/ (S*.95) )+'%';}
+function zoomBy(f,pt){fitted=false;const z=Math.min(60,Math.max(.03,canvas.getZoom()*f));const p=pt||new fabric.Point(canvas.width/2,canvas.height/2);canvas.zoomToPoint(p,z);updZoom();}
+canvas.on('mouse:wheel',opt=>{zoomBy(Math.pow(.999,opt.e.deltaY),new fabric.Point(opt.e.offsetX,opt.e.offsetY));opt.e.preventDefault();opt.e.stopPropagation();});
+
+/* ================= HISTORY ================= */
+function snapshot(){return JSON.stringify({p:prod.id,seq:idSeq,c:canvas.toJSON(PROPS)});}
+let saveT=0;
+function save(){if(restoring)return;clearTimeout(saveT);saveT=setTimeout(()=>{const s=snapshot();if(hist[hIdx]===s)return;hist=hist.slice(0,hIdx+1);hist.push(s);if(hist.length>60)hist.shift();hIdx=hist.length-1;refreshPanels();},180);}
+function loadState(s,cb){
+  restoring=true;const d=JSON.parse(s);prod=PRODUCTS.find(p=>p.id===d.p)||PRODUCTS[0];if(d.seq)idSeq=Math.max(idSeq,d.seq);
+  canvas.loadFromJSON(d.c,()=>{board=boardObj();if(board)board.set({selectable:false,evented:false});canvas.renderAll();restoring=false;refreshAll();cb&&cb();});
+}
+function undo(){if(hIdx>0){hIdx--;loadState(hist[hIdx]);toast('Đã hoàn tác');}}
+function redo(){if(hIdx<hist.length-1){hIdx++;loadState(hist[hIdx]);toast('Đã làm lại');}}
+canvas.on('object:added',e=>{if(e.target&&!e.target.id&&e.target.name!=='__board')e.target.id=nid();save();});
+canvas.on('object:modified',save);canvas.on('object:removed',save);
+canvas.on('text:changed',save);
+
+/* ================= OBJECT FACTORY ================= */
+function finish(o,select=true){o.id=o.id||nid();canvas.add(o);if(select){canvas.setActiveObject(o);}canvas.requestRenderAll();return o;}
+function polyPoints(n,r,star,inner){const pts=[];const k=star?n*2:n;for(let i=0;i<k;i++){const a=-Math.PI/2+i*Math.PI*2/k;const rr=star&&i%2?r*(inner||.45):r;pts.push({x:rr*Math.cos(a),y:rr*Math.sin(a)});}return pts;}
+function mkText(t,o={}){return new fabric.IText(t,{fontFamily:o.font||'Be Vietnam Pro',fontSize:(o.size||8)*S,fill:o.fill||'#1d2433',fontWeight:o.weight||'normal',fontStyle:o.italic?'italic':'normal',textAlign:o.align||'center',originX:'center',originY:'center',left:o.x,top:o.y,charSpacing:o.spacing||0});}
+function arcText(text,o){
+  /* o: {r, size, font, fill, weight, pos:'top'|'bottom', spacing} in units */
+  const chars=[...String(text)],measure=chars.map(ch=>{const t=new fabric.Text(ch,{fontFamily:o.font,fontSize:o.size,fontWeight:o.weight||'normal'});return t.width+(o.spacing||0);});
+  const total=measure.reduce((a,b)=>a+b,0),items=[];let acc=0;
+  chars.forEach((ch,i)=>{const w=measure[i];let a,rot;
+    if(o.pos==='bottom'){a=Math.PI/2+total/(2*o.r)-(acc+w/2)/o.r;rot=a-Math.PI/2;}else{a=-Math.PI/2-total/(2*o.r)+(acc+w/2)/o.r;rot=a+Math.PI/2;}
+    acc+=w;items.push(new fabric.Text(ch,{fontFamily:o.font,fontSize:o.size,fill:o.fill,fontWeight:o.weight||'normal',originX:'center',originY:'center',left:o.r*Math.cos(a),top:o.r*Math.sin(a),angle:rot*180/Math.PI}));});
+  /* an invisible circle keeps the arc centre at the group's centre so rebuilding keeps position */
+  const c=new fabric.Circle({radius:o.r,left:0,top:0,originX:'center',originY:'center',fill:'',stroke:'',strokeWidth:0,opacity:0,selectable:false});
+  const gg=new fabric.Group([c,...items],{originX:'center',originY:'center'});
+  gg.data={kind:'arctext',text:String(text),r:o.r,size:o.size,font:o.font,fill:o.fill,weight:o.weight||'normal',pos:o.pos||'top',spacing:o.spacing||0,label:'Chữ cong'};return gg;
+}
+function rebuildArc(g,patch){
+  const d={...g.data,...patch};const c=g.getCenterPoint(),ang=g.angle,sx=g.scaleX,sy=g.scaleY;
+  const n=arcText(d.text,d);n.set({angle:ang,scaleX:sx,scaleY:sy});n.setPositionByOrigin(c,'center','center');n.id=g.id;
+  const idx=canvas.getObjects().indexOf(g);restoring=true;canvas.remove(g);canvas.insertAt(n,idx);restoring=false;canvas.setActiveObject(n);canvas.requestRenderAll();save();return n;
+}
+function lotus(cx,cy,s,fill,stroke,sw){
+  const parts=[];[-62,-31,0,31,62].forEach((a,i)=>parts.push(new fabric.Ellipse({rx:s*.14,ry:s*(i===2?.42:.36),originX:'center',originY:'bottom',left:0,top:0,angle:a,fill,stroke,strokeWidth:sw||0})));
+  parts.push(new fabric.Ellipse({rx:s*.42,ry:s*.07,originX:'center',originY:'center',left:0,top:s*.02,fill,stroke,strokeWidth:sw||0}));
+  const g=new fabric.Group(parts,{originX:'center',originY:'center'});g.set({left:cx,top:cy});g.data={label:'Hoa sen'};return g;
+}
+function cloud(cx,cy,s,color,sw){
+  const p=`M ${-s} 0 a ${s*.45} ${s*.45} 0 1 1 ${s*.7} ${-s*.35} a ${s*.5} ${s*.5} 0 1 1 ${s*.85} ${s*.1} a ${s*.38} ${s*.38} 0 1 1 ${s*.45} ${s*.55} Z M ${-s*.55} ${-s*.05} a ${s*.18} ${s*.18} 0 1 0 ${s*.3} ${-s*.1}`;
+  const o=new fabric.Path(p,{fill:'',stroke:color,strokeWidth:sw,strokeLineCap:'round',strokeLineJoin:'round',originX:'center',originY:'center',left:cx,top:cy});o.data={label:'Mây'};return o;
+}
+function heart(cx,cy,s,fill){const o=new fabric.Path('M 0 -3 C -5 -10 -14 -2 0 8 C 14 -2 5 -10 0 -3 Z',{fill,originX:'center',originY:'center',left:cx,top:cy,scaleX:s/16,scaleY:s/16});o.data={label:'Tim'};return o;}
+function star(cx,cy,r,fill){const o=new fabric.Polygon(polyPoints(5,r,true,.45),{fill,originX:'center',originY:'center',left:cx,top:cy});o.data={label:'Sao'};return o;}
+function waveBand(x0,y,w,r,color,sw){const n=Math.max(1,Math.round(w/(2*r)));r=w/(2*n);let d='';for(let i=0,x=x0;i<n;i++,x+=2*r){d+=`M ${x} ${y} A ${r} ${r} 0 0 1 ${x+2*r} ${y} `;}const o=new fabric.Path(d,{fill:'',stroke:color,strokeWidth:sw});o.data={label:'Dải sóng'};return o;}
+function pattern(motif,color,density,opacity){
+  const w=W(),h=H(),m=Math.min(w,h),sp=m/(density||8),items=[];
+  for(let y=sp/2,row=0;y<h;y+=sp*.87,row++)for(let x=(row%2?sp:sp/2);x<w;x+=sp){
+    if(motif==='dots')items.push(new fabric.Circle({radius:sp*.12,left:x,top:y,originX:'center',originY:'center',fill:color}));
+    else if(motif==='diamonds')items.push(new fabric.Polygon(polyPoints(4,sp*.16),{left:x,top:y,originX:'center',originY:'center',fill:color}));
+    else if(motif==='stars')items.push(star(x,y,sp*.16,color));
+    else if(motif==='hearts')items.push(heart(x,y,sp*.3,color));
+    else if(motif==='clouds')items.push(cloud(x,y,sp*.22,color,sp*.025));
+    else if(motif==='waves')items.push(new fabric.Path(`M ${x-sp*.4} ${y} q ${sp*.2} ${-sp*.2} ${sp*.4} 0 t ${sp*.4} 0`,{fill:'',stroke:color,strokeWidth:sp*.04}));
+  }
+  const g=new fabric.Group(items,{opacity:opacity??.35});g.data={label:'Họa tiết nền'};return g;
+}
+
+/* ================= STYLE TEMPLATES ================= */
+function applyStyle(id,info={}){
+  const st=STYLES[id]||STYLES.sangtrong,w=W(),h=H(),m=Math.min(w,h),wide=w/h>1.6,cx=w/2;
+  const brand=info.brand||$('lBrand').value||'Thương hiệu',slogan=info.slogan??($('lSlogan').value||''),sub=info.sub??'';
+  const c1=info.c1||st.c1,c2=info.c2||st.c2,objs=[];
+  restoring=true;userObjs().forEach(o=>canvas.remove(o));restoring=false;board.set('fill',st.bg);
+  const emb=(x,y,s)=>{
+    if(id==='menlam'||id==='truyenthong'){objs.push(lotus(x,y+s*.18,s*.95,id==='menlam'?'':c1,id==='menlam'?c1:'',id==='menlam'?s*.03:0));}
+    else if(id==='vintage'){const b=new fabric.Group([new fabric.Circle({radius:s*.5,originX:'center',originY:'center',fill:'',stroke:c1,strokeWidth:s*.03}),new fabric.Circle({radius:s*.43,originX:'center',originY:'center',fill:'',stroke:c1,strokeWidth:s*.012}),mkText(initials(brand),{font:st.disp,size:s*.3/S,fill:c1,weight:'600',x:0,y:0})],{originX:'center',originY:'center',left:x,top:y});b.data={label:'Huy hiệu'};objs.push(b);}
+    else if(id==='dethuong'){objs.push(new fabric.Circle({radius:s*.46,left:x,top:y,originX:'center',originY:'center',fill:c1}));objs.push(mkText(initials(brand),{font:st.disp,size:s*.36/S,fill:'#ffffff',weight:'800',x,y:y+s*.03}));objs.push(heart(x+s*.42,y-s*.36,s*.28,c2));}
+    else if(id==='toigian'){objs.push(new fabric.Rect({width:s*.7,height:s*.7,left:x,top:y,originX:'center',originY:'center',fill:c1}));objs.push(mkText(initials(brand),{font:st.disp,size:s*.3/S,fill:'#ffffff',weight:'800',x,y:y+s*.02}));objs.push(new fabric.Rect({width:s*.7,height:s*.06,left:x,top:y+s*.42,originX:'center',originY:'center',fill:c2}));}
+    else {objs.push(new fabric.Circle({radius:s*.5,left:x,top:y,originX:'center',originY:'center',fill:'',stroke:c1,strokeWidth:s*.025}));objs.push(new fabric.Circle({radius:s*.44,left:x,top:y,originX:'center',originY:'center',fill:'',stroke:c1,strokeWidth:s*.01}));objs.push(mkText(initials(brand),{font:st.disp,size:s*.34/S,fill:c1,weight:'600',x,y:y+s*.02}));}
+  };
+  const deco=()=>{
+    if(id==='menlam'){const bh=(wide?h*.14:m*.07);objs.push(new fabric.Rect({left:0,top:0,width:w,height:bh,fill:c1}),new fabric.Rect({left:0,top:h-bh,width:w,height:bh,fill:c1}));objs.push(waveBand(0,bh+bh*.55,w,bh*.45,c1,bh*.09),waveBand(0,h-bh-bh*.15,w,bh*.45,c1,bh*.09));}
+    if(id==='truyenthong'){const i=m*.04;objs.push(new fabric.Rect({left:i,top:i,width:w-2*i,height:h-2*i,fill:'',stroke:c1,strokeWidth:m*.012}),new fabric.Rect({left:i*1.6,top:i*1.6,width:w-3.2*i,height:h-3.2*i,fill:'',stroke:c2,strokeWidth:m*.005}));
+      const cs=m*.09;[[i*3.2,i*3.2],[w-i*3.2,i*3.2],[i*3.2,h-i*3.2],[w-i*3.2,h-i*3.2]].forEach(([x,y])=>objs.push(cloud(x,y,cs*.6,c2,m*.008)));}
+    if(id==='sangtrong'){const i=m*.045;objs.push(new fabric.Rect({left:i,top:i,width:w-2*i,height:h-2*i,fill:'',stroke:c1,strokeWidth:m*.008}),new fabric.Rect({left:i*1.5,top:i*1.5,width:w-3*i,height:h-3*i,fill:'',stroke:c1,strokeWidth:m*.003}));}
+    if(id==='vintage'){const i=m*.05;objs.push(new fabric.Rect({left:i,top:i,width:w-2*i,height:h-2*i,rx:m*.04,ry:m*.04,fill:'',stroke:c1,strokeWidth:m*.01,strokeDashArray:[m*.02,m*.012]}));}
+    if(id==='dethuong'){const rs=[.07,.05,.09,.04,.06];[[.08,.15],[.92,.2],[.12,.85],[.88,.82],[.5,.06]].forEach(([x,y],k)=>objs.push(new fabric.Circle({radius:m*rs[k],left:w*x,top:h*y,originX:'center',originY:'center',fill:k%2?c2:c1,opacity:.25})));}
+    if(id==='toigian'){objs.push(new fabric.Rect({left:w*.08,top:h-m*.08,width:w*.84,height:m*.004,fill:c1}));}
+  };
+  deco();
+  const tcol=id==='sangtrong'?c1:st.ink;
+  if(wide){
+    const bh=h*.14,ti=id==='menlam'?bh*2.15:h*.1,ch=h-2*ti;const es=ch*.52;emb(cx,ti+ch*.3,es);
+    objs.push(mkText(id==='sangtrong'||id==='menlam'||id==='vintage'?brand.toUpperCase():brand,{font:st.disp,size:ch*.17/S,fill:tcol,weight:id==='dethuong'||id==='toigian'?'800':'600',x:cx,y:ti+ch*.72,spacing:id==='sangtrong'||id==='menlam'?180:0}));
+    if(slogan)objs.push(mkText(slogan,{font:st.body,size:ch*.085/S,fill:id==='sangtrong'?st.c2:c1,italic:id==='sangtrong'||id==='truyenthong',x:cx,y:ti+ch*.9}));
+    /* side motifs */
+    const sx=[w*.18,w*.82];
+    sx.forEach(x=>{if(id==='menlam')objs.push(lotus(x,h*.56,h*.3,'',c1,h*.01));else if(id==='truyenthong')objs.push(cloud(x,h*.5,h*.13,c1,h*.012));else if(id==='dethuong')objs.push(heart(x,h*.5,h*.22,c1));else if(id==='vintage'||id==='sangtrong')objs.push(star(x,h*.5,h*.07,c1));});
+  }else{
+    const es=m*.36;emb(cx,h*.34,es);
+    objs.push(mkText(id==='sangtrong'||id==='menlam'||id==='vintage'?brand.toUpperCase():brand,{font:st.disp,size:m*.11/S,fill:tcol,weight:id==='dethuong'||id==='toigian'?'800':'600',x:cx,y:h*.62,spacing:id==='sangtrong'||id==='menlam'?160:0}));
+    if(slogan)objs.push(mkText(slogan,{font:st.body,size:m*.05/S,fill:id==='sangtrong'?st.c2:c1,italic:id==='sangtrong'||id==='truyenthong',x:cx,y:h*.71}));
+    if(sub)objs.push(mkText(sub,{font:st.body,size:m*.038/S,fill:tcol,x:cx,y:h*.79}));
+    if(id==='vintage'){objs.push(star(cx-m*.18,h*.71+m*.0,m*.02,c1),star(cx+m*.18,h*.71,m*.02,c1));}
+  }
+  /* fit text widths to page */
+  objs.forEach(o=>{if(o.type==='i-text'){const mw=w*(wide?.6:.82);if(o.width>mw)o.scaleToWidth(mw);}o.id=nid();canvas.add(o);});
+  canvas.discardActiveObject();canvas.requestRenderAll();save();
+  return `Đã áp dụng phong cách ${st.name} (${objs.length} đối tượng).`;
+}
+
+/* ================= LOGO GENERATOR ================= */
+function buildLogo(kind,o){
+  const s=o.size,brand=o.brand||'Thương hiệu',slogan=o.slogan||'',c1=o.c1,c2=o.c2,font=o.font,ini=initials(brand),items=[];
+  if(kind==='badge'){
+    items.push(new fabric.Circle({radius:s*.5,originX:'center',originY:'center',fill:c1}),new fabric.Circle({radius:s*.47,originX:'center',originY:'center',fill:'',stroke:'#ffffff',strokeWidth:s*.008}),new fabric.Circle({radius:s*.3,originX:'center',originY:'center',fill:'',stroke:c2,strokeWidth:s*.012}));
+    items.push(arcText(brand.toUpperCase(),{r:s*.38,size:s*.085,font,fill:'#ffffff',weight:'700',pos:'top',spacing:s*.01}));
+    if(slogan)items.push(arcText(slogan,{r:s*.39,size:s*.055,font:'Be Vietnam Pro',fill:c2,pos:'bottom'}));
+    items.push(mkText(ini,{font,size:s*.2/S,fill:'#ffffff',weight:'800',x:0,y:s*.01}));
+    items.push(star(-s*.4,0,s*.03,c2),star(s*.4,0,s*.03,c2));
+  }else if(kind==='shield'){
+    items.push(new fabric.Path(`M 0 ${-s*.48} L ${s*.38} ${-s*.36} L ${s*.38} ${s*.02} Q ${s*.38} ${s*.34} 0 ${s*.5} Q ${-s*.38} ${s*.34} ${-s*.38} ${s*.02} L ${-s*.38} ${-s*.36} Z`,{fill:c1,originX:'center',originY:'center',left:0,top:0}));
+    items.push(new fabric.Path(`M 0 ${-s*.42} L ${s*.32} ${-s*.32} L ${s*.32} ${s*.02} Q ${s*.32} ${s*.29} 0 ${s*.43} Q ${-s*.32} ${s*.29} ${-s*.32} ${s*.02} L ${-s*.32} ${-s*.32} Z`,{fill:'',stroke:c2,strokeWidth:s*.012,originX:'center',originY:'center',left:0,top:-s*.003}));
+    items.push(mkText(ini,{font,size:s*.24/S,fill:'#ffffff',weight:'800',x:0,y:-s*.02}));
+    const t=mkText(brand.toUpperCase(),{font:'Be Vietnam Pro',size:s*.06/S,fill:c2,weight:'700',x:0,y:s*.22,spacing:150});if(t.width>s*.55)t.scaleToWidth(s*.55);items.push(t);
+  }else if(kind==='lotus'){
+    items.push(lotus(0,-s*.12,s*.48,c1,'',0));
+    const t=mkText(brand,{font,size:s*.12/S,fill:c1,weight:'700',x:0,y:s*.24});if(t.width>s*.95)t.scaleToWidth(s*.95);items.push(t);
+    if(slogan){const u=mkText(slogan,{font:'Be Vietnam Pro',size:s*.05/S,fill:c2,x:0,y:s*.36,spacing:80});if(u.width>s*.9)u.scaleToWidth(s*.9);items.push(u);}
+  }else if(kind==='hex'){
+    items.push(new fabric.Polygon(polyPoints(6,s*.32),{fill:'',stroke:c1,strokeWidth:s*.03,originX:'center',originY:'center',left:0,top:-s*.12,angle:30}));
+    items.push(mkText(ini,{font,size:s*.18/S,fill:c1,weight:'800',x:0,y:-s*.11}));
+    const t=mkText(brand.toUpperCase(),{font,size:s*.085/S,fill:c1,weight:'700',x:0,y:s*.3,spacing:120});if(t.width>s*.95)t.scaleToWidth(s*.95);items.push(t);
+    items.push(new fabric.Rect({width:s*.18,height:s*.012,fill:c2,originX:'center',originY:'center',left:0,top:s*.39}));
+  }else if(kind==='script'){
+    const t=mkText(brand,{font:'Dancing Script',size:s*.2/S,fill:c1,weight:'700',x:0,y:-s*.04});if(t.width>s*.95)t.scaleToWidth(s*.95);items.push(t);
+    items.push(new fabric.Path(`M ${-s*.38} ${s*.12} Q 0 ${s*.2} ${s*.4} ${s*.06}`,{fill:'',stroke:c2,strokeWidth:s*.014,strokeLineCap:'round'}));
+    if(slogan){const u=mkText(slogan.toUpperCase(),{font:'Montserrat',size:s*.045/S,fill:c1,weight:'600',x:0,y:s*.26,spacing:200});if(u.width>s*.9)u.scaleToWidth(s*.9);items.push(u);}
+  }else{ /* stamp */
+    items.push(new fabric.Rect({width:s*.96,height:s*.56,rx:s*.05,ry:s*.05,originX:'center',originY:'center',fill:'',stroke:c1,strokeWidth:s*.02}));
+    items.push(new fabric.Rect({width:s*.88,height:s*.48,rx:s*.035,ry:s*.035,originX:'center',originY:'center',fill:'',stroke:c1,strokeWidth:s*.006}));
+    const t=mkText(brand.toUpperCase(),{font:'Oswald',size:s*.13/S,fill:c1,weight:'600',x:0,y:-s*.04,spacing:60});if(t.width>s*.8)t.scaleToWidth(s*.8);items.push(t);
+    items.push(new fabric.Rect({width:s*.5,height:s*.008,fill:c2,originX:'center',originY:'center',left:0,top:s*.08}));
+    if(slogan){const u=mkText(slogan,{font:'Lora',size:s*.05/S,fill:c1,italic:true,x:0,y:s*.15});if(u.width>s*.8)u.scaleToWidth(s*.8);items.push(u);}
+    items.push(star(-s*.38,s*.08,s*.02,c2),star(s*.38,s*.08,s*.02,c2));
+  }
+  const g=new fabric.Group(items,{originX:'center',originY:'center'});g.data={label:'Logo · '+(LOGOS.find(l=>l.id===kind)||{}).name};return g;
+}
+function insertLogo(kind,o){
+  const m=Math.min(W(),H());const g=buildLogo(kind,{...o,size:400});g.scaleToWidth(Math.min(m*.6,W()*.5));
+  g.set({left:W()/2,top:H()/2});g.id=nid();canvas.add(g);canvas.setActiveObject(g);canvas.requestRenderAll();
+  return 'Đã chèn logo '+kind;
+}
+function logoThumb(kind,o){
+  const el=document.createElement('canvas');const sc=new fabric.StaticCanvas(el,{width:240,height:240,backgroundColor:'#ffffff',enableRetinaScaling:false});
+  const g=buildLogo(kind,{...o,size:200});g.set({left:120,top:120});sc.add(g);sc.renderAll();const url=sc.toDataURL({format:'png'});sc.dispose();return url;
+}
+
+/* ================= ACTIONS (shared by UI and AI) ================= */
+function findObjs(ids){
+  if(!ids||ids==='selection'||(Array.isArray(ids)&&!ids.length))return canvas.getActiveObjects();
+  if(ids==='all')return userObjs();
+  const arr=Array.isArray(ids)?ids:[ids];return userObjs().filter(o=>arr.includes(o.id));
+}
+function withDetached(objs,fn){
+  const act=canvas.getActiveObjects();const had=act.length>1;canvas.discardActiveObject();fn(objs);
+  objs.forEach(o=>o.setCoords());if(had&&act.length>1){canvas.setActiveObject(new fabric.ActiveSelection(act.filter(o=>canvas.getObjects().includes(o)),{canvas}));}else if(act.length===1&&canvas.getObjects().includes(act[0]))canvas.setActiveObject(act[0]);
+  canvas.requestRenderAll();save();
+}
+function alignObjs(objs,h,v,to){
+  if(!objs.length)return'Chưa chọn đối tượng';
+  withDetached(objs,os=>{
+    const rs=os.map(o=>o.getBoundingRect(true,true));let T;
+    if(to==='page'||os.length===1)T={left:0,top:0,width:W(),height:H()};
+    else{const l=Math.min(...rs.map(r=>r.left)),t=Math.min(...rs.map(r=>r.top)),r2=Math.max(...rs.map(r=>r.left+r.width)),b=Math.max(...rs.map(r=>r.top+r.height));T={left:l,top:t,width:r2-l,height:b-t};}
+    os.forEach((o,i)=>{const r=rs[i];let dx=0,dy=0;
+      if(h==='left')dx=T.left-r.left;else if(h==='center')dx=T.left+T.width/2-(r.left+r.width/2);else if(h==='right')dx=T.left+T.width-(r.left+r.width);
+      if(v==='top')dy=T.top-r.top;else if(v==='middle')dy=T.top+T.height/2-(r.top+r.height/2);else if(v==='bottom')dy=T.top+T.height-(r.top+r.height);
+      o.set({left:o.left+dx,top:o.top+dy});});
+  });return 'Đã căn '+objs.length+' đối tượng';
+}
+function setProps(objs,p){
+  if(!objs.length)return'Chưa chọn đối tượng';
+  withDetached(objs,os=>os.forEach(o=>{
+    const isText=o.type==='i-text'||o.type==='text'||o.type==='textbox';
+    if(o.data&&o.data.kind==='arctext'&&(p.text!=null||p.fontFamily||p.fill||p.radius||p.fontSize)){const patch={};if(p.text!=null)patch.text=p.text;if(p.fontFamily)patch.font=p.fontFamily;if(p.fill)patch.fill=p.fill;if(p.radius)patch.r=p.radius*S;if(p.fontSize)patch.size=p.fontSize*S;setTimeout(()=>rebuildArc(o,patch));return;}
+    const q={};
+    if(p.fill!=null){if(o.type==='group'&&!(o.data&&o.data.kind))recolorDeep(o,null,p.fill);else q.fill=p.fill;}
+    if(p.stroke!=null)q.stroke=p.stroke;
+    if(p.strokeWidth!=null)q.strokeWidth=p.strokeWidth*S;
+    if(p.opacity!=null)q.opacity=Math.max(0,Math.min(1,p.opacity));
+    if(p.angle!=null)q.angle=p.angle;
+    if(isText){if(p.text!=null)q.text=String(p.text);if(p.fontFamily)q.fontFamily=p.fontFamily;if(p.fontSize)q.fontSize=p.fontSize*S/(o.scaleY||1);if(p.fontWeight)q.fontWeight=p.fontWeight;if(p.fontStyle)q.fontStyle=p.fontStyle;if(p.textAlign)q.textAlign=p.textAlign;if(p.charSpacing!=null)q.charSpacing=p.charSpacing;}
+    o.set(q);if(isText&&o.initDimensions)o.initDimensions();
+    if(p.width||p.height){const br=o.getBoundingRect(true,true);if(p.width&&p.height&&!lockRatio){o.set({scaleX:o.scaleX*(p.width*S)/br.width,scaleY:o.scaleY*(p.height*S)/br.height});}else if(p.width){const f=(p.width*S)/br.width;o.set({scaleX:o.scaleX*f,scaleY:lockRatio?o.scaleY*f:o.scaleY});}else{const f=(p.height*S)/br.height;o.set({scaleY:o.scaleY*f,scaleX:lockRatio?o.scaleX*f:o.scaleX});}}
+    if(p.x!=null||p.y!=null){o.setCoords();const br=o.getBoundingRect(true,true);o.set({left:o.left+(p.x!=null?p.x*S-br.left:0),top:o.top+(p.y!=null?p.y*S-br.top:0)});}
+    if(p.cx!=null||p.cy!=null){o.setCoords();const c=o.getCenterPoint();o.set({left:o.left+(p.cx!=null?p.cx*S-c.x:0),top:o.top+(p.cy!=null?p.cy*S-c.y:0)});}
+  }));return 'Đã cập nhật '+objs.length+' đối tượng';
+}
+function eachDeep(o,fn){fn(o);if(o._objects)o._objects.forEach(c=>eachDeep(c,fn));}
+function colorsOf(objs){const set=new Map();objs.forEach(o=>eachDeep(o,c=>{if(c.type==='group'||c.type==='activeSelection')return;[['fill',c.fill],['stroke',c.strokeWidth?c.stroke:null]].forEach(([k,v])=>{const hx=hex(v);if(hx)set.set(hx,(set.get(hx)||0)+1);});}));return [...set.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]);}
+function recolorDeep(o,from,to){eachDeep(o,c=>{if(c.type==='group')return;['fill','stroke'].forEach(k=>{const hx=hex(c[k]);if(hx&&(!from||hx===from))c.set(k,to);});});o.dirty=true;}
+function arrange(objs,action){
+  if(!objs.length&&action!=='ungroup')return'Chưa chọn đối tượng';
+  const act=canvas.getActiveObject();
+  switch(action){
+    case'front':objs.forEach(o=>canvas.bringToFront(o));break;
+    case'back':[...objs].reverse().forEach(o=>{canvas.sendToBack(o);});canvas.sendToBack(boardObj());break;
+    case'forward':objs.forEach(o=>canvas.bringForward(o));break;
+    case'backward':objs.forEach(o=>{if(canvas.getObjects().indexOf(o)>1)canvas.sendBackwards(o);});break;
+    case'delete':canvas.discardActiveObject();objs.forEach(o=>canvas.remove(o));break;
+    case'duplicate':{canvas.discardActiveObject();const clones=[];let n=objs.length;objs.forEach(o=>o.clone(c=>{eachDeep(c,x=>x.id=null);c.set({left:c.left+6*S,top:c.top+6*S});c.id=nid();c.data=o.data?JSON.parse(JSON.stringify(o.data)):c.data;canvas.add(c);clones.push(c);if(--n===0){canvas.setActiveObject(clones.length>1?new fabric.ActiveSelection(clones,{canvas}):clones[0]);canvas.requestRenderAll();}},PROPS));break;}
+    case'group':{if(act&&act.type==='activeSelection'){const g=act.toGroup();g.id=nid();g.data={label:'Nhóm'};}else if(objs.length>1){canvas.setActiveObject(new fabric.ActiveSelection(objs,{canvas}));const g=canvas.getActiveObject().toGroup();g.id=nid();g.data={label:'Nhóm'};}break;}
+    case'ungroup':{const g=act&&act.type==='group'?act:objs.find(o=>o.type==='group');if(g){if(canvas.getActiveObject()!==g)canvas.setActiveObject(g);const sel=g.toActiveSelection();sel.getObjects().forEach(o=>{o.id=o.id||nid();});}break;}
+    case'flipX':objs.forEach(o=>o.set('flipX',!o.flipX));break;
+    case'flipY':objs.forEach(o=>o.set('flipY',!o.flipY));break;
+    case'lock':objs.forEach(o=>{o.set({lockMovementX:true,lockMovementY:true,lockScalingX:true,lockScalingY:true,lockRotation:true,hasControls:false});o.data={...(o.data||{}),locked:true};});break;
+    case'unlock':objs.forEach(o=>{o.set({lockMovementX:false,lockMovementY:false,lockScalingX:false,lockScalingY:false,lockRotation:false,hasControls:true});if(o.data)delete o.data.locked;});break;
+  }
+  canvas.requestRenderAll();save();refreshProps();return 'Đã thực hiện: '+action;
+}
+function addText(a){
+  const x=(a.x!=null?a.x:prod.w/2)*S,y=(a.y!=null?a.y:prod.h/2)*S;
+  if(a.curveRadius){const g=arcText(a.text,{r:a.curveRadius*S,size:(a.fontSize||8)*S,font:a.fontFamily||'Be Vietnam Pro',fill:a.fill||'#1d2433',weight:a.bold?'700':'normal',pos:a.curvePosition==='bottom'?'bottom':'top'});g.set({left:x,top:y});finish(g);return 'Đã thêm chữ cong';}
+  const t=mkText(a.text||'Chữ mới',{font:a.fontFamily,size:a.fontSize||8,fill:a.fill,weight:a.bold?'700':'normal',italic:a.italic,x,y,spacing:a.charSpacing||0});finish(t);return 'Đã thêm chữ “'+t.text+'” ('+t.id+')';
+}
+function addShape(a){
+  const w=(a.w||40)*S,h=(a.h||a.w||40)*S,x=(a.x!=null?a.x:prod.w/2)*S,y=(a.y!=null?a.y:prod.h/2)*S,base={left:x,top:y,originX:'center',originY:'center',fill:a.fill??'#ff5d02',stroke:a.stroke||'',strokeWidth:(a.strokeWidth||0)*S};
+  let o;switch(a.shape){
+    case'ellipse':o=new fabric.Ellipse({...base,rx:w/2,ry:h/2});break;
+    case'polygon':o=new fabric.Polygon(polyPoints(a.sides||6,Math.min(w,h)/2),base);break;
+    case'star':o=new fabric.Polygon(polyPoints(a.sides||5,Math.min(w,h)/2,true,.45),base);break;
+    case'line':o=new fabric.Line([x-w/2,y,x+w/2,y],{stroke:a.stroke||a.fill||'#1d2433',strokeWidth:(a.strokeWidth||.6)*S});break;
+    case'lotus':o=lotus(x,y,Math.min(w,h),a.fill??'#1f3f8f',a.stroke||'',(a.strokeWidth||0)*S);break;
+    case'cloud':o=cloud(x,y,Math.min(w,h)*.5,a.stroke||a.fill||'#d9a33a',(a.strokeWidth||.8)*S);break;
+    case'heart':o=heart(x,y,Math.min(w,h),a.fill??'#e86a8c');break;
+    default:o=new fabric.Rect({...base,width:w,height:h,rx:(a.radius||0)*S,ry:(a.radius||0)*S});
+  }
+  finish(o);return 'Đã thêm '+(a.shape||'rect')+' ('+o.id+')';
+}
+function setProduct(id,keep=true){
+  const np=PRODUCTS.find(p=>p.id===id);if(!np)return'Không có sản phẩm '+id;
+  const ow=W(),oh=H(),objs=userObjs();prod=np;const fill=board?board.fill:'#ffffff';makeBoard(fill);
+  if(keep&&objs.length){const f=Math.min(W()/ow,H()/oh);const dx=(W()-ow*f)/2,dy=(H()-oh*f)/2;
+    objs.forEach(o=>{o.set({scaleX:o.scaleX*f,scaleY:o.scaleY*f,left:o.left*f+dx,top:o.top*f+dy});o.setCoords();});}
+  canvas.discardActiveObject();fitPage();canvas.requestRenderAll();save();refreshAll();return 'Đã chuyển sang '+np.name+' ('+np.w+'×'+np.h+' mm)';
+}
+function getState(){
+  return{product:{id:prod.id,name:prod.name,w_mm:prod.w,h_mm:prod.h,shape:prod.shape||'rect',safe_mm:prod.safe,bleed_mm:prod.bleed,tech:prod.tech},page_color:hex(board.fill),
+    selected:canvas.getActiveObjects().map(o=>o.id),
+    objects:userObjs().slice(0,60).map(o=>{const r=o.getBoundingRect(true,true);const d={id:o.id,type:o.data&&o.data.kind==='arctext'?'arc-text':o.type,x:+mm(r.left),y:+mm(r.top),w:+mm(r.width),h:+mm(r.height)};
+      if(o.text!=null){d.text=o.text;d.font=o.fontFamily;d.size_mm=+mm(o.fontSize*o.scaleY);d.fill=hex(o.fill);}else if(o.data&&o.data.kind==='arctext'){d.text=o.data.text;d.font=o.data.font;d.fill=o.data.fill;}else{d.colors=colorsOf([o]).slice(0,4);}
+      if(o.data&&o.data.label)d.label=o.data.label;return d;})};
+}
+
+/* ================= TOOLS UI ================= */
+const TOOLS=[['select','Chọn (V)'],['hand','Di chuyển trang (H / giữ Space)'],null,['rect','Hình chữ nhật (R)'],['ellipse','Elip (E)'],['polygon','Đa giác (Y)'],['star','Ngôi sao (S)'],['line','Đường thẳng (L)'],['pen','Bút vẽ tay (P)'],null,['text','Chữ (T)'],['arc','Chữ uốn cong (C)'],['image','Chèn ảnh (I)']];
+function buildTools(){$('tools').innerHTML=TOOLS.map(t=>t?`<button class="tool${['polygon','star','line','pen','hand'].includes(t[0])?' adv':''}" data-tool="${t[0]}" title="${t[1]}" aria-label="${t[1]}" aria-pressed="${tool===t[0]}">${svg(t[0],'0 0 20 20')}</button>`:'<hr>').join('')+'<input type="file" id="fImg" accept="image/*" hidden>';}
+function setTool(t){
+  if(t==='image'){$('fImg').click();return;}
+  tool=t;canvas.isDrawingMode=t==='pen';
+  if(t==='pen'){canvas.freeDrawingBrush=new fabric.PencilBrush(canvas);canvas.freeDrawingBrush.color=$('penColor')?.value||'#1d2433';canvas.freeDrawingBrush.width=(+($('penW')?.value)||.8)*S;}
+  const creating=['rect','ellipse','polygon','star','line','text','arc'].includes(t);canvas.skipTargetFind=creating||t==='hand';canvas.selection=t==='select';
+  canvas.defaultCursor=t==='hand'?'grab':creating?'crosshair':'default';if(creating||t==='hand')canvas.discardActiveObject();
+  document.querySelectorAll('.tool').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tool===t));canvas.requestRenderAll();refreshProps();
+}
+canvas.on('path:created',e=>{e.path.set({fill:'',strokeLineCap:'round',strokeLineJoin:'round'});e.path.id=nid();e.path.data={label:'Nét vẽ tay'};save();});
+canvas.on('mouse:down',opt=>{
+  const e=opt.e;
+  if(tool==='hand'||spaceDown||e.altKey&&tool==='select'&&!opt.target){pan={x:e.clientX,y:e.clientY};canvas.setCursor('grabbing');return;}
+  const p=canvas.getPointer(e);
+  if(tool==='text'){const t=mkText('Nhập chữ',{x:p.x,y:p.y,size:Math.max(4,Math.round(Math.min(prod.w,prod.h)*.08))});finish(t);setTool('select');canvas.setActiveObject(t);t.enterEditing();t.selectAll();return;}
+  if(tool==='arc'){const r=Math.min(W(),H())*.3;const g=arcText('CHỮ UỐN CONG',{r,size:r*.18,font:'Montserrat',fill:'#1d2433',weight:'600',pos:'top'});g.set({left:p.x,top:p.y});finish(g);setTool('select');return;}
+  if(['rect','ellipse','polygon','star','line'].includes(tool)){drag={kind:tool,x0:p.x,y0:p.y,x1:p.x,y1:p.y,box:{x:p.x,y:p.y,w:0,h:0}};}
+});
+canvas.on('mouse:move',opt=>{
+  const e=opt.e,p=canvas.getPointer(e);$('status').innerHTML=statusHTML(p);
+  if(pan){fitted=false;const v=canvas.viewportTransform;v[4]+=e.clientX-pan.x;v[5]+=e.clientY-pan.y;pan={x:e.clientX,y:e.clientY};canvas.setViewportTransform(v);return;}
+  if(drag){drag.x1=p.x;drag.y1=p.y;let x=Math.min(drag.x0,p.x),y=Math.min(drag.y0,p.y),w=Math.abs(p.x-drag.x0),h=Math.abs(p.y-drag.y0);if(e.shiftKey){const s=Math.max(w,h);w=h=s;}drag.box={x,y,w,h};canvas.requestRenderAll();}
+});
+canvas.on('mouse:up',()=>{
+  if(pan){pan=null;canvas.setCursor(tool==='hand'?'grab':'default');return;}
+  if(!drag)return;const d=drag;drag=null;let {x,y,w,h}=d.box;const small=w<2*S&&h<2*S;if(small){w=h=Math.min(W(),H())*.25;x-=w/2;y-=h/2;}
+  const fill=$('newFill')?.value||'#ff5d02';
+  if(d.kind==='line'){const o=new fabric.Line(small?[x,y+h/2,x+w,y+h/2]:[d.x0,d.y0,d.x1,d.y1],{stroke:'#1d2433',strokeWidth:.6*S,strokeLineCap:'round'});finish(o);}
+  else addShape({shape:d.kind,x:(x+w/2)/S,y:(y+h/2)/S,w:w/S,h:h/S,fill});
+  setTool('select');save();
+});
+function statusHTML(p){return `<span>X ${mm(p.x).toFixed(1)} mm</span><span>Y ${mm(p.y).toFixed(1)} mm</span><span>Trang ${prod.w} × ${prod.h} mm</span><span>Tràn lề ${prod.bleed} · An toàn ${prod.safe} mm</span><span>${userObjs().length} đối tượng</span>`;}
+
+/* ================= PROPERTY BAR ================= */
+let propLock=false;
+function refreshProps(){
+  if(propLock)return;const objs=canvas.getActiveObjects(),pb=$('propbar');
+  if(tool==='pen'){pb.innerHTML=`<div class="pg"><label>Màu bút</label><input type="color" id="penColor" value="#1d2433"></div><div class="pg"><label>Nét (mm)</label><input type="number" id="penW" value="0.8" step="0.1" min="0.1"></div><span class="hint">Kéo chuột để vẽ. Chọn công cụ khác để dừng.</span>`;
+    $('penColor').oninput=e=>canvas.freeDrawingBrush.color=e.target.value;$('penW').oninput=e=>canvas.freeDrawingBrush.width=(+e.target.value||.8)*S;return;}
+  if(!objs.length){
+    pb.innerHTML=`<div class="pg"><b style="font-size:12.5px">${prod.name}</b></div><div class="pg"><label>Rộng</label><input type="number" id="pW" value="${prod.w}" min="10" step="1"><label>Cao</label><input type="number" id="pH" value="${prod.h}" min="10" step="1"><label>mm</label></div>
+    <div class="pg"><label>Màu nền</label><input type="color" id="pBg" value="${hex(board.fill)||'#ffffff'}"></div><div class="pg"><label>Màu hình mới</label><input type="color" id="newFill" value="${refreshProps.nf||'#ff5d02'}"></div><span class="hint">Chọn công cụ bên trái, hoặc nhờ Trợ lý AI ở khung chat.</span>`;
+    $('pBg').oninput=e=>{board.set('fill',e.target.value);canvas.requestRenderAll();};$('pBg').onchange=save;
+    $('newFill').oninput=e=>refreshProps.nf=e.target.value;
+    const rs=()=>{prod={...prod,w:Math.max(10,+$('pW').value||prod.w),h:Math.max(10,+$('pH').value||prod.h),id:prod.id};PRODUCTS[PRODUCTS.findIndex(p=>p.id===prod.id)]=prod;makeBoard(hex(board.fill));fitPage();save();refreshAll();};
+    $('pW').onchange=rs;$('pH').onchange=rs;return;
+  }
+  const o=objs.length===1?objs[0]:null,act=canvas.getActiveObject(),br=act.getBoundingRect(true,true);
+  const isText=o&&(o.type==='i-text'||o.type==='text');const isArc=o&&o.data&&o.data.kind==='arctext';
+  let h=`<div class="pg"><label>X</label><input type="number" id="qX" step="0.5" value="${mm(br.left)}"><label>Y</label><input type="number" id="qY" step="0.5" value="${mm(br.top)}"></div>
+  <div class="pg"><label>R</label><input type="number" id="qW" step="0.5" min="0.5" value="${mm(br.width)}"><label>C</label><input type="number" id="qH" step="0.5" min="0.5" value="${mm(br.height)}"><button class="ib" id="qRatio" title="Giữ tỉ lệ" aria-pressed="${lockRatio}">${svg('ratio')}</button></div>
+  <div class="pg"><label>Góc°</label><input type="number" id="qA" step="1" value="${Math.round(act.angle||0)}"></div>`;
+  if(isText||isArc){const f=isArc?o.data.font:o.fontFamily,sz=isArc?o.data.size/S:o.fontSize*o.scaleY/S;
+    h+=`<div class="pg"><select id="qF" aria-label="Phông chữ">${FONTS.map(x=>`<option ${x===f?'selected':''} style="font-family:'${x}'">${x}</option>`).join('')}</select><input type="number" id="qFs" step="0.5" min="1" value="${(sz/0.3528).toFixed(1)}" title="Cỡ chữ (pt)"><label>pt</label></div>`;
+    if(isText)h+=`<div class="pg"><button class="ib" id="qB" aria-pressed="${o.fontWeight==='bold'||+o.fontWeight>=600}" title="Đậm">${svg('bold')}</button><button class="ib" id="qI" aria-pressed="${o.fontStyle==='italic'}" title="Nghiêng">${svg('ital')}</button><button class="ib" data-ta="left" title="Căn trái">${svg('tL')}</button><button class="ib" data-ta="center" title="Căn giữa">${svg('tC')}</button><button class="ib" data-ta="right" title="Căn phải">${svg('tR')}</button><label>Giãn</label><input type="number" id="qCs" step="10" value="${o.charSpacing||0}"></div>`;
+    if(isArc)h+=`<div class="pg"><input type="text" class="wide" id="qAt" value="${o.data.text.replace(/"/g,'&quot;')}" aria-label="Nội dung chữ cong"><label>Bán kính</label><input type="number" id="qAr" step="1" value="${mm(o.data.r)}"><select id="qAp"><option value="top" ${o.data.pos!=='bottom'?'selected':''}>Cung trên</option><option value="bottom" ${o.data.pos==='bottom'?'selected':''}>Cung dưới</option></select></div>`;
+  }
+  const isGroupish=act.type==='activeSelection'||(o&&o.type==='group'&&!isArc);
+  if(isGroupish){const cs=colorsOf(objs).slice(0,8);h+=`<div class="pg"><label>Màu</label>${cs.map(c=>`<label class="swatch" style="background:${c}" title="${c}"><input type="color" value="${c}" data-from="${c}"></label>`).join('')}</div>`;}
+  else if(o){const fl=isArc?o.data.fill:o.fill;h+=`<div class="pg"><label>Tô</label><input type="color" id="qFill" value="${hex(fl)||'#ffffff'}"><button class="ib" id="qNoFill" title="Không tô">∅</button>${QUICK.slice(0,8).map(c=>`<button class="swatch" data-qc="${c}" style="background:${c}" title="${c}"></button>`).join('')}<label>Viền</label><input type="color" id="qSt" value="${hex(o.stroke)||'#000000'}"><input type="number" id="qSw" step="0.1" min="0" value="${mm(o.strokeWidth||0)}" title="Độ dày viền (mm)"></div>`;}
+  h+=`<div class="pg"><label>Mờ</label><input type="number" id="qO" step="5" min="0" max="100" value="${Math.round((act.opacity??1)*100)}"></div>
+  <div class="pg">${['aL','aC','aR','aT','aM','aB'].map(k=>`<button class="ib" data-al="${k}" title="${{aL:'Căn trái',aC:'Căn giữa ngang',aR:'Căn phải',aT:'Căn trên',aM:'Căn giữa dọc',aB:'Căn dưới'}[k]} ${objs.length>1?'(theo nhóm chọn)':'(theo trang)'}">${svg(k)}</button>`).join('')}</div>
+  <div class="pg"><button class="ib" data-ar="front" title="Lên trên cùng">${svg('front')}</button><button class="ib" data-ar="back" title="Xuống dưới cùng">${svg('back')}</button><button class="ib" data-ar="flipX" title="Lật ngang">${svg('flipH')}</button><button class="ib" data-ar="flipY" title="Lật dọc">${svg('flipV')}</button>
+  ${objs.length>1?`<button class="ib" data-ar="group" title="Nhóm (Ctrl+G)">${svg('group')}</button>`:''}${o&&o.type==='group'&&!isArc?`<button class="ib" data-ar="ungroup" title="Rã nhóm (Ctrl+U)">${svg('ungroup')}</button>`:''}
+  <button class="ib" data-ar="duplicate" title="Nhân bản (Ctrl+D)">${svg('dup')}</button><button class="ib" data-ar="${o&&o.data&&o.data.locked?'unlock':'lock'}" title="${o&&o.data&&o.data.locked?'Mở khóa':'Khóa'}">${svg(o&&o.data&&o.data.locked?'unlock':'lock')}</button><button class="ib" data-ar="delete" title="Xóa (Delete)">${svg('del')}</button></div>`;
+  pb.innerHTML=h;
+  const sel=()=>canvas.getActiveObjects(),num=id=>parseFloat($(id).value);
+  const on=(id,ev,fn)=>{const el=$(id);if(el)el.addEventListener(ev,fn);};
+  propLock=false;
+  const guard=fn=>()=>{propLock=true;try{fn();}finally{propLock=false;}};
+  on('qX','change',guard(()=>setProps([act],{x:num('qX')})));on('qY','change',guard(()=>setProps([act],{y:num('qY')})));
+  on('qW','change',guard(()=>setProps([act],{width:num('qW')})));on('qH','change',guard(()=>setProps([act],{height:num('qH')})));
+  on('qA','change',guard(()=>setProps([act],{angle:num('qA')})));on('qO','change',()=>setProps([act],{opacity:num('qO')/100}));
+  on('qRatio','click',()=>{lockRatio=!lockRatio;refreshProps();});
+  on('qF','change',async e=>{const f=e.target.value;try{await document.fonts.load(`20px "${f}"`,'Tiếng Việt');}catch(_){}setProps(sel(),{fontFamily:f});fabric.util.clearFabricFontCache&&fabric.util.clearFabricFontCache(f);canvas.requestRenderAll();});
+  on('qFs','change',()=>setProps(sel(),{fontSize:num('qFs')*0.3528}));
+  on('qB','click',()=>setProps(sel(),{fontWeight:(o.fontWeight==='bold'||+o.fontWeight>=600)?'normal':'bold'}));
+  on('qI','click',()=>setProps(sel(),{fontStyle:o.fontStyle==='italic'?'normal':'italic'}));
+  on('qCs','change',()=>setProps(sel(),{charSpacing:num('qCs')}));
+  on('qAt','change',e=>rebuildArc(o,{text:e.target.value}));on('qAr','change',()=>rebuildArc(o,{r:num('qAr')*S}));on('qAp','change',e=>rebuildArc(o,{pos:e.target.value}));
+  on('qFill','input',e=>{if(isArc)return;o.set('fill',e.target.value);canvas.requestRenderAll();});on('qFill','change',e=>{if(isArc)rebuildArc(o,{fill:e.target.value});else save();});
+  on('qNoFill','click',()=>{o.set('fill','');canvas.requestRenderAll();save();});
+  on('qSt','input',e=>{o.set({stroke:e.target.value,strokeWidth:o.strokeWidth||.5*S});canvas.requestRenderAll();});on('qSt','change',save);
+  on('qSw','change',()=>{o.set('strokeWidth',num('qSw')*S);if(!o.stroke)o.set('stroke','#000000');canvas.requestRenderAll();save();});
+  pb.querySelectorAll('[data-qc]').forEach(b=>b.onclick=()=>{if(isArc)rebuildArc(o,{fill:b.dataset.qc});else{o.set(o.type==='line'||(o.type==='path'&&!o.fill)?'stroke':'fill',b.dataset.qc);canvas.requestRenderAll();save();refreshProps();}});
+  pb.querySelectorAll('[data-ta]').forEach(b=>b.onclick=()=>setProps(sel(),{textAlign:b.dataset.ta}));
+  pb.querySelectorAll('[data-al]').forEach(b=>b.onclick=()=>{const k=b.dataset.al;alignObjs(sel(),{aL:'left',aC:'center',aR:'right'}[k],{aT:'top',aM:'middle',aB:'bottom'}[k],sel().length>1?'selection':'page');});
+  pb.querySelectorAll('[data-ar]').forEach(b=>b.onclick=()=>arrange(sel(),b.dataset.ar));
+  pb.querySelectorAll('[data-from]').forEach(inp=>{inp.oninput=e=>{const from=inp.dataset.from;sel().forEach(x=>recolorDeep(x,from,e.target.value));inp.dataset.from=e.target.value.toLowerCase();inp.parentElement.style.background=e.target.value;canvas.requestRenderAll();};inp.onchange=save;});
+}
+['selection:created','selection:updated','selection:cleared'].forEach(ev=>canvas.on(ev,()=>{refreshProps();refreshLayers();if(dockTab==='font'){const v=$('fSample');const t=canvas.getActiveObjects().find(o=>o.text!=null);if(v&&t){v.value=t.text;v.oninput({target:v});}}}));
+let liveT=0;['object:moving','object:scaling','object:rotating'].forEach(ev=>canvas.on(ev,()=>{clearTimeout(liveT);liveT=setTimeout(refreshProps,60);}));
+canvas.on('object:modified',()=>refreshProps());
+
+/* ================= DOCK PANELS ================= */
+function refreshProdPanel(){
+  const groups=[...new Set(PRODUCTS.map(p=>p.g))];
+  $('d-prod').innerHTML=groups.map(g=>`<h3>${g}</h3><div class="plist">${PRODUCTS.filter(p=>p.g===g).map(p=>`<button class="pcard" data-p="${p.id}" aria-pressed="${p.id===prod.id}"><b>${p.name}</b><span>${p.shape==='circle'?'Ø'+p.w:p.w+' × '+p.h} mm</span></button>`).join('')}</div>`).join('')+
+  `<div class="spec">${prod.name}<br>Vùng in ${prod.shape==='circle'?'Ø'+prod.w:prod.w+' × '+prod.h} mm · tràn ${prod.bleed} · an toàn ${prod.safe} mm<br><em>Giá trị mẫu — nhập khuôn xưởng trước khi in</em></div><div class="hint">${prod.tech}</div><div class="hint">Đổi sản phẩm sẽ co giãn thiết kế hiện tại vào trang mới — tiện làm cả bộ ấm chén cùng một mẫu.</div><h3>Sản phẩm của anh</h3><button class="btn primary" id="upProd">Tải ảnh sản phẩm lên để ghép thiết kế</button><div class="hint">Chụp ấm, chén, bình, cốc… thật rồi tải lên: thiết kế được đặt lên ảnh, kéo vị trí, chỉnh cỡ, độ cong thân. Kích thước khác: bỏ chọn mọi đối tượng rồi nhập Rộng/Cao ở thanh trên.</div>`;
+  $('upProd').onclick=async()=>{await openMock();$('mPhoto').click();};
+  $('d-prod').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{setProduct(b.dataset.p);toast('Đã chuyển sang '+prod.name);});
+}
+function buildStylePanel(){
+  $('d-style').innerHTML=`<div class="row"><label class="f">Thương hiệu<input type="text" id="sBrand" value="Gốm Việt"></label><label class="f">Khẩu hiệu<input type="text" id="sSlogan" value="Tinh hoa đất Việt"></label></div><label class="f">Dòng phụ<input type="text" id="sSub" value="Quà tặng doanh nghiệp"></label>
+  <h3>Chọn phong cách — tạo bố cục có thể sửa từng phần</h3><div class="styles">${Object.entries(STYLES).map(([k,s])=>`<button class="scard" data-s="${k}"><div class="sw"><i style="background:${s.bg}"></i><i style="background:${s.c1}"></i><i style="background:${s.c2}"></i></div><div class="t"><b style="font-family:'${s.disp}'">${s.name}</b><span>${s.note}</span></div></button>`).join('')}</div>
+  <h3>Họa tiết nền</h3><div class="row"><select id="pMotif" class="f" style="flex:1;padding:6px;border:1px solid var(--line);border-radius:7px;background:var(--panel2)"><option value="dots">Chấm bi</option><option value="diamonds">Quả trám</option><option value="stars">Ngôi sao</option><option value="hearts">Trái tim</option><option value="clouds">Mây</option><option value="waves">Sóng nước</option></select><input type="color" id="pColor" value="#1f3f8f"><button class="btn" id="pAdd">Thêm</button></div>
+  <div class="hint">Mẫu áp dụng sẽ thay thiết kế đang có (có thể Hoàn tác).</div>`;
+  $('d-style').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{applyStyle(b.dataset.s,{brand:$('sBrand').value,slogan:$('sSlogan').value,sub:$('sSub').value});toast('Đã áp dụng '+STYLES[b.dataset.s].name);});
+  $('pAdd').onclick=()=>{const g=pattern($('pMotif').value,$('pColor').value,8,.3);g.id=nid();canvas.insertAt(g,1);canvas.requestRenderAll();save();toast('Đã thêm họa tiết nền');};
+}
+function buildLogoPanel(){
+  $('d-logo').innerHTML=`<div class="row"><label class="f">Tên thương hiệu<input type="text" id="lBrand" value="Gốm Việt"></label><label class="f">Khẩu hiệu<input type="text" id="lSlogan" value="Tinh hoa đất Việt"></label></div>
+  <div class="row"><label class="f">Phông chính<select id="lFont">${FONTS.map(f=>`<option ${f==='Playfair Display'?'selected':''}>${f}</option>`).join('')}</select></label><input type="color" id="lC1" value="#1f3f8f" aria-label="Màu chính"><input type="color" id="lC2" value="#d9a33a" aria-label="Màu phụ"></div>
+  <button class="btn primary" id="lGen">Tạo 6 phương án logo</button><div class="logos" id="lGrid"></div><div class="hint">Bấm một phương án để chèn vào trang. Logo là nhóm vector: rã nhóm để sửa từng phần. Kiểm tra trùng lặp thương hiệu trước khi dùng thật.</div>`;
+  $('lGen').onclick=genLogos;
+}
+function logoOpts(){return{brand:$('lBrand').value,slogan:$('lSlogan').value,font:$('lFont').value,c1:$('lC1').value,c2:$('lC2').value};}
+async function genLogos(){const o=logoOpts();try{await document.fonts.load(`40px "${o.font}"`,o.brand);}catch(_){}
+  $('lGrid').innerHTML=LOGOS.map(l=>`<button class="lcard" data-l="${l.id}"><img alt="${l.name}" src="${logoThumb(l.id,o)}">${l.name}</button>`).join('');
+  $('lGrid').querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{insertLogo(b.dataset.l,logoOpts());save();toast('Đã chèn logo');});}
+function buildFontPanel(){
+  const sel=canvas.getActiveObjects(),t=sel.find(o=>o.text!=null)||sel.find(o=>o.data&&o.data.kind==='arctext');const sample=t?(t.text||t.data.text):($('lBrand')?.value||'Gốm Việt');
+  $('d-font').innerHTML=`<h3>${sel.length?'Bấm để đổi phông cho chữ đang chọn':'Chọn một dòng chữ trên trang rồi bấm phông'}</h3><label class="f">Chữ xem thử<input type="text" id="fSample" value="${String(sample).replace(/"/g,'&quot;')}"></label><div class="fonts">${FONTS.map(f=>`<button class="fcard" data-f="${f}"><b style="font-family:'${f}'">${String(sample).replace(/</g,'&lt;')}</b><span>${f} · ${FONT_KIND[f]||''}</span></button>`).join('')}</div><div class="hint">Mọi phông trong danh sách có bộ dấu tiếng Việt theo Google Fonts; vẫn nên xem kỹ dấu trước khi in.</div>`;
+  $('fSample').oninput=e=>$('d-font').querySelectorAll('.fcard b').forEach(b=>b.textContent=e.target.value||'Gốm Việt');
+  $('d-font').querySelectorAll('[data-f]').forEach(b=>b.onclick=async()=>{const f=b.dataset.f,os=canvas.getActiveObjects();if(!os.length){toast('Chọn chữ trên trang trước');return;}try{await document.fonts.load(`20px "${f}"`,'Tiếng Việt');}catch(_){}
+    const texts=[];os.forEach(o=>eachDeep(o,c=>{if(c.text!=null&&c.type!=='group')texts.push(c);}));const arcs=os.filter(o=>o.data&&o.data.kind==='arctext');
+    if(texts.length&&!arcs.length&&os.every(o=>o.text!=null))setProps(os,{fontFamily:f});else{texts.forEach(c=>{c.set('fontFamily',f);c.initDimensions&&c.initDimensions();});os.forEach(o=>o.dirty=true);arcs.forEach(a=>rebuildArc(a,{font:f}));canvas.requestRenderAll();save();}
+    toast('Đã đổi phông: '+f);});
+}
+function buildColorPanel(){
+  $('d-color').innerHTML=`<h3>Bảng phối màu — áp cho cả thiết kế</h3><div class="pals">${PALETTES.map((p,i)=>`<button class="pal" data-p="${i}"><span>${p[0]}</span><span class="sw">${p.slice(1).map(c=>`<i style="background:${c}"></i>`).join('')}</span></button>`).join('')}</div>
+  <h3>Màu nhanh — tô cho đối tượng đang chọn</h3><div class="qcol">${QUICK.map(c=>`<button data-c="${c}" style="background:${c}" title="${c}" aria-label="${c}"></button>`).join('')}</div>
+  <div class="row"><input type="color" id="cPick" value="#1f3f8f"><button class="btn" id="cApply">Tô màu này</button><button class="btn" id="cBg">Làm màu nền</button></div><div class="hint">Đổi từng màu riêng của logo/nhóm: chọn nhóm, bấm vào ô màu trên thanh thuộc tính.</div>`;
+  $('d-color').querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const p=PALETTES[+b.dataset.p];const cur=colorsOf(userObjs()).filter(c=>c!==hex(board.fill));board.set('fill',p[1]);const tgt=p.slice(2);cur.forEach((c,i)=>userObjs().forEach(o=>recolorDeep(o,c,tgt[i%tgt.length])));userObjs().forEach(o=>{if(o.data&&o.data.kind==='arctext')o.data.fill=hex(o._objects[1]&&o._objects[1].fill)||o.data.fill;});canvas.requestRenderAll();save();toast('Đã áp bảng màu '+p[0]);});
+  const paint=c=>{const os=canvas.getActiveObjects();if(!os.length){toast('Chọn đối tượng trước');return;}os.forEach(o=>{if(o.data&&o.data.kind==='arctext')rebuildArc(o,{fill:c});else if(o.type==='group')recolorDeep(o,null,c);else if(o.type==='line'||(o.type==='path'&&!o.fill))o.set('stroke',c);else o.set('fill',c);});canvas.requestRenderAll();save();refreshProps();};
+  $('d-color').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>paint(b.dataset.c));$('cApply').onclick=()=>paint($('cPick').value);$('cBg').onclick=()=>{board.set('fill',$('cPick').value);canvas.requestRenderAll();save();};
+}
+function refreshLayers(){
+  if(dockTab!=='layer')return;const act=canvas.getActiveObjects(),list=userObjs().slice().reverse();
+  const nm=o=>o.data&&o.data.label?o.data.label+(o.data.kind==='arctext'?' “'+o.data.text.slice(0,16)+'”':''):o.text!=null?'“'+o.text.slice(0,22)+'”':({rect:'Hình chữ nhật',ellipse:'Elip',circle:'Hình tròn',polygon:'Đa giác',line:'Đường',path:'Đường vẽ',image:'Ảnh',group:'Nhóm'}[o.type]||o.type);
+  $('d-layer').innerHTML=list.length?`<h3>${list.length} lớp · trên cùng ở đầu</h3><div class="layers">${list.map(o=>`<div class="layer ${act.includes(o)?'on':''}" data-id="${o.id}"><span><small>${o.id}</small>${nm(o)}</span><button class="ib" data-v="${o.id}" title="Ẩn/hiện">${svg(o.visible?'eye':'eyeoff')}</button><button class="ib" data-k="${o.id}" title="Khóa/mở" aria-pressed="${!!(o.data&&o.data.locked)}">${svg(o.data&&o.data.locked?'lock':'unlock')}</button></div>`).join('')}</div>`:'<div class="hint">Trang trống. Thêm chữ, hình, mẫu hoặc logo.</div>';
+  $('d-layer').querySelectorAll('.layer').forEach(r=>r.onclick=e=>{if(e.target.closest('button'))return;const o=userObjs().find(x=>x.id===r.dataset.id);if(o){canvas.setActiveObject(o);canvas.requestRenderAll();}});
+  $('d-layer').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const o=userObjs().find(x=>x.id===b.dataset.v);o.set('visible',!o.visible);canvas.discardActiveObject();canvas.requestRenderAll();save();refreshLayers();});
+  $('d-layer').querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{const o=userObjs().find(x=>x.id===b.dataset.k);arrange([o],o.data&&o.data.locked?'unlock':'lock');refreshLayers();});
+}
+function checks(){
+  const out=[['warn',`Khuôn ${prod.name} là giá trị mẫu. Nhập kích thước của xưởng trước khi in thật.`]];const sz=prod.safe*S,w=W(),h=H(),b=(prod.bleed||0)*S;let small=0,edge=0,out2=0;
+  userObjs().forEach(o=>{if(!o.visible)return;const r=o.getBoundingRect(true,true);
+    eachDeep(o,c=>{if(c.text!=null&&c.type!=='group'){const z=c.fontSize*(c.scaleY||1)*(o!==c?o.scaleY||1:1)/S;if(z<2.5)small++;}});
+    if(r.left<sz||r.top<sz||r.left+r.width>w-sz||r.top+r.height>h-sz){if(r.left<-b-1||r.top<-b-1||r.left+r.width>w+b+1||r.top+r.height>h+b+1)out2++;else edge++;}
+    if(o.type==='image'&&o._element){const wmm=o.width*o.scaleX/S;const ppi=o._element.naturalWidth/(wmm/25.4);out.push(ppi>=300?['ok',`Ảnh ${o.id}: khoảng ${Math.round(ppi)} ppi.`]:ppi>=150?['warn',`Ảnh ${o.id}: ${Math.round(ppi)} ppi, nên dùng ảnh lớn hơn.`]:['bad',`Ảnh ${o.id}: ${Math.round(ppi)} ppi, sẽ vỡ khi in.`]);}
+  });
+  out.push(small?['warn',`${small} dòng chữ cao dưới 2,5 mm, có thể khó đọc khi in.`]:['ok','Cỡ chữ đều từ 2,5 mm trở lên.']);
+  if(edge)out.push(['warn',`${edge} đối tượng nằm ngoài vùng an toàn (đường xanh), dễ bị xén.`]);
+  if(out2)out.push(['bad',`${out2} đối tượng tràn ra ngoài trang và lề tràn, phần đó sẽ bị cắt.`]);
+  if(!edge&&!out2&&userObjs().length)out.push(['ok','Mọi đối tượng nằm trong vùng an toàn.']);
+  const cs=colorsOf(userObjs());if(/lụa/.test(prod.tech))out.push(cs.length>3?['warn',`Thiết kế dùng ${cs.length} màu. In lụa mỗi màu một khuôn — nên giảm màu.`]:['ok',`${cs.length} màu — hợp in lụa.`]);
+  out.push(['ok','PNG xuất ở 300 ppi theo đúng kích thước mm; SVG giữ vector.']);
+  $('d-check').innerHTML=`<h3>Kiểm tra trước khi in</h3><ul class="checks">${out.map(([k,t])=>`<li class="${k}"><i></i><span>${t}</span></li>`).join('')}</ul><div class="hint">${prod.tech}</div>`;
+  return out;
+}
+function setDock(t){dockTab=t;document.querySelectorAll('#dtabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));['prod','style','logo','font','color','layer','check'].forEach(k=>$('d-'+k).hidden=k!==t);if(t==='layer')refreshLayers();if(t==='check')checks();if(t==='logo'&&!$('lGrid').children.length)genLogos();if(t==='font')buildFontPanel();if(t==='color')buildColorPanel();}
+$('dtabs').onclick=e=>{const b=e.target.closest('button');if(b)setDock(b.dataset.t);};
+let panT=0;function refreshPanels(){clearTimeout(panT);panT=setTimeout(()=>{refreshLayers();if(dockTab==='check')checks();$('status').innerHTML=statusHTML({x:0,y:0});},120);}
+function refreshAll(){$('prodTitle').textContent=`${prod.name} · ${prod.shape==='circle'?'Ø'+prod.w:prod.w+'×'+prod.h} mm`;refreshProdPanel();refreshProps();refreshPanels();}
+
+/* ================= EXPORT ================= */
+function renderRegion(mult,withBleed){
+  const b=withBleed?(prod.bleed||0)*S:0,v=canvas.viewportTransform.slice();exporting=true;canvas.discardActiveObject();canvas.setViewportTransform([1,0,0,1,0,0]);
+  let url;try{url=canvas.toDataURL({format:'png',left:-b,top:-b,width:W()+2*b,height:H()+2*b,multiplier:mult});}finally{canvas.setViewportTransform(v);exporting=false;canvas.requestRenderAll();}
+  return url;
+}
+async function saveFile(name,data){try{const blob=data instanceof Blob?data:new Blob([data]);const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Đã tải '+name);return true;}catch(e){toast('Không tải được file');return false;}}
+function dataURLtoBlob(u){const [h,b]=u.split(',');const bin=atob(b);const a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return new Blob([a],{type:h.slice(5).split(';')[0]});}
+const fname=ext=>`${prod.id}-${prod.w}x${prod.h}mm.${ext}`;
+$('bPng').onclick=async()=>{const mult=300/25.4/S;let url=renderRegion(mult,true);
+  if(prod.shape==='circle'){const im=new Image();await new Promise(r=>{im.onload=r;im.src=url;});const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);x.globalCompositeOperation='destination-in';x.beginPath();x.arc(c.width/2,c.height/2,c.width/2,0,Math.PI*2);x.fill();url=c.toDataURL('image/png');}
+  saveFile(fname('png'),dataURLtoBlob(url));};
+$('bSvg').onclick=()=>{const v=canvas.viewportTransform.slice();exporting=true;canvas.discardActiveObject();canvas.setViewportTransform([1,0,0,1,0,0]);
+  let s;try{s=canvas.toSVG({width:prod.w+'mm',height:prod.h+'mm',viewBox:{x:0,y:0,width:W(),height:H()}});}finally{canvas.setViewportTransform(v);exporting=false;canvas.requestRenderAll();}
+  saveFile(fname('svg'),new Blob([s],{type:'image/svg+xml'}));};
+$('bSave').onclick=()=>saveFile(`du-an-${prod.id}.json`,new Blob([snapshot()],{type:'application/json'}));
+$('bOpen').onclick=()=>$('fOpen').click();
+$('fOpen').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{JSON.parse(r.result);loadState(r.result,()=>{fitPage();save();toast('Đã mở dự án');});}catch(_){toast('File dự án không hợp lệ');}};r.readAsText(f);e.target.value='';};
+$('bUndo').onclick=undo;$('bRedo').onclick=redo;$('zIn').onclick=()=>zoomBy(1.25);$('zOut').onclick=()=>zoomBy(.8);$('zFit').onclick=fitPage;
+
+/* images */
+document.addEventListener('change',e=>{if(e.target.id!=='fImg')return;const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{fabric.Image.fromURL(r.result,img=>{const m=Math.min(W(),H())*.6;img.scaleToWidth(Math.min(m,img.width));if(img.getScaledHeight()>m)img.scaleToHeight(m);img.set({left:W()/2,top:H()/2,originX:'center',originY:'center'});img.data={label:'Ảnh · '+f.name.slice(0,20)};finish(img);save();toast('Đã chèn ảnh');});};r.readAsDataURL(f);e.target.value='';});
+
+/* keyboard */
+document.addEventListener('keydown',e=>{
+  const tag=(e.target.tagName||'').toLowerCase();const ao=canvas.getActiveObject();if(tag==='input'||tag==='textarea'||tag==='select'||(ao&&ao.isEditing))return;
+  const k=e.key.toLowerCase(),mod=e.ctrlKey||e.metaKey;
+  if(e.code==='Space'){if(!spaceDown){spaceDown=true;canvas.defaultCursor='grab';}e.preventDefault();return;}
+  if(mod&&k==='z'){e.preventDefault();e.shiftKey?redo():undo();return;}if(mod&&k==='y'){e.preventDefault();redo();return;}
+  if(mod&&k==='d'){e.preventDefault();arrange(canvas.getActiveObjects(),'duplicate');return;}
+  if(mod&&k==='g'){e.preventDefault();arrange(canvas.getActiveObjects(),'group');return;}
+  if(mod&&k==='u'){e.preventDefault();arrange(canvas.getActiveObjects(),'ungroup');return;}
+  if(mod&&k==='a'){e.preventDefault();canvas.setActiveObject(new fabric.ActiveSelection(userObjs().filter(o=>o.visible),{canvas}));canvas.requestRenderAll();return;}
+  if(k==='delete'||k==='backspace'){if(canvas.getActiveObjects().length){e.preventDefault();arrange(canvas.getActiveObjects(),'delete');}return;}
+  if(k.startsWith('arrow')&&ao){e.preventDefault();const d=(e.shiftKey?5:1)*S;ao.set({left:ao.left+(k==='arrowleft'?-d:k==='arrowright'?d:0),top:ao.top+(k==='arrowup'?-d:k==='arrowdown'?d:0)});ao.setCoords();canvas.requestRenderAll();save();refreshProps();return;}
+  if(mod)return;
+  if(k==='p'&&ao&&!e.shiftKey){alignObjs(canvas.getActiveObjects(),'center','middle','page');return;}
+  if(e.key==='F4'&&e.shiftKey){fitPage();return;}
+  const map={v:'select',h:'hand',r:'rect',e:'ellipse',y:'polygon',s:'star',l:'line',t:'text',c:'arc',i:'image',b:'pen'};if(map[k]){setTool(map[k]);}
+  if(k==='escape'){canvas.discardActiveObject();setTool('select');}
+});
+document.addEventListener('keyup',e=>{if(e.code==='Space'){spaceDown=false;canvas.defaultCursor=tool==='hand'?'grab':'default';}});
+$('tools').addEventListener('click',e=>{const b=e.target.closest('[data-tool]');if(b)setTool(b.dataset.tool);});
+
+/* ================= MOCKUP ================= */
+const M={photo:null,x:.5,y:.5,s:.38,c:0,r:0,mul:true,img:null};
+function bodyPath(ctx,cx,y0,h,wf,n=60){ctx.beginPath();for(let i=0;i<=n;i++){const f=i/n;ctx.lineTo(cx-wf(f)/2,y0+f*h);}for(let i=n;i>=0;i--){const f=i/n;ctx.lineTo(cx+wf(f)/2,y0+f*h);}ctx.closePath();}
+function wrapBody(ctx,img,cx,y0,h,wf,band,vis){
+  const cw=600,cyl=document.createElement('canvas');cyl.width=cw;cyl.height=img.height;const yc=cyl.getContext('2d');
+  const sx0=img.width*(.5-vis/2),sw=img.width*vis;for(let j=0;j<cw;j++){const xp=(j+.5)/cw,t=Math.acos(1-2*xp)/Math.PI;yc.drawImage(img,sx0+t*sw,0,1,img.height,j,0,1.4,img.height);}
+  const ya=y0+band[0]*h,yb=y0+band[1]*h;for(let y=ya;y<yb;y+=1){const f=(y-y0)/h,w=wf(f),src=(y-ya)/(yb-ya)*img.height;ctx.drawImage(cyl,0,src,cw,Math.max(1,img.height/(yb-ya)),cx-w/2,y,w,1.6);}
+}
+function shade(ctx,cx,y0,h,wf){bodyPath(ctx,cx,y0,h,wf);const mw=Math.max(...Array.from({length:21},(_,i)=>wf(i/20)));const g=ctx.createLinearGradient(cx-mw/2,0,cx+mw/2,0);g.addColorStop(0,'rgba(0,0,0,.30)');g.addColorStop(.28,'rgba(255,255,255,.22)');g.addColorStop(.4,'rgba(255,255,255,0)');g.addColorStop(.82,'rgba(0,0,0,.06)');g.addColorStop(1,'rgba(0,0,0,.34)');ctx.fillStyle=g;ctx.fill();}
+function drawMock(){
+  const c=$('mcv'),ctx=c.getContext('2d'),img=M.img,pc=$('mColor').value;ctx.clearRect(0,0,c.width,c.height);ctx.save();ctx.scale(2,2);
+  if(M.photo){const p=M.photo,k=Math.min(600/p.width,520/p.height),pw=p.width*k,ph=p.height*k,px=(600-pw)/2,py=(520-ph)/2;ctx.drawImage(p,px,py,pw,ph);
+    const dw=pw*M.s,dh=dw*img.height/img.width,cx=px+pw*M.x,cy=py+ph*M.y;ctx.save();ctx.translate(cx,cy);ctx.rotate(M.r*Math.PI/180);if(M.mul)ctx.globalCompositeOperation='multiply';
+    if(M.c>0){const n=160;for(let j=0;j<n;j++){const t0=j/n,a=(t0-.5)*Math.PI*M.c*.9,sx=(Math.sin(a)/Math.sin(Math.PI*M.c*.45||1e-6))*.5+.5;const x=(M.c>0?sx:t0)*dw-dw/2;const wcol=dw/n*Math.cos(a)*1.4+.6;ctx.drawImage(img,t0*img.width,0,img.width/n,img.height,x,-dh/2,wcol,dh);}}
+    else ctx.drawImage(img,-dw/2,-dh/2,dw,dh);ctx.restore();ctx.restore();return;}
+  const sh=(f)=>{ctx.save();ctx.shadowColor='rgba(0,0,0,.25)';ctx.shadowBlur=24;ctx.shadowOffsetY=10;f();ctx.restore();};
+  const body=(cx,y0,h,wf,band,vis)=>{sh(()=>{bodyPath(ctx,cx,y0,h,wf);ctx.fillStyle=pc;ctx.fill();});ctx.save();bodyPath(ctx,cx,y0,h,wf);ctx.clip();wrapBody(ctx,img,cx,y0,h,wf,band,vis);ctx.restore();shade(ctx,cx,y0,h,wf);ctx.strokeStyle='rgba(0,0,0,.25)';ctx.lineWidth=1;bodyPath(ctx,cx,y0,h,wf);ctx.stroke();};
+  const k=prod.mock;
+  if(k==='mug'){ctx.lineWidth=26;ctx.strokeStyle=pc;sh(()=>{ctx.beginPath();ctx.arc(385,255,66,-1.25,1.25);ctx.stroke();});ctx.lineWidth=1;ctx.strokeStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.arc(385,255,79,-1.2,1.2);ctx.stroke();ctx.beginPath();ctx.arc(385,255,53,-1.2,1.2);ctx.stroke();
+    body(280,110,290,()=>250,[.04,.96],.5);ctx.beginPath();ctx.ellipse(280,110,125,14,0,0,Math.PI*2);ctx.fillStyle='#ece9e3';ctx.fill();ctx.stroke();}
+  else if(k==='teacup'){const wf=f=>290-120*f;body(300,170,170,wf,[.08,.92],.5);ctx.beginPath();ctx.ellipse(300,170,145,20,0,0,Math.PI*2);ctx.fillStyle='#f1eee8';ctx.fill();ctx.strokeStyle='rgba(0,0,0,.25)';ctx.stroke();ctx.fillStyle=pc;ctx.fillRect(255,340,90,14);}
+  else if(k==='teapot'){const wf=f=>330*Math.sqrt(Math.max(0,1-Math.pow((f-.5)/.56,2)));ctx.fillStyle=pc;ctx.strokeStyle='rgba(0,0,0,.25)';
+    sh(()=>{ctx.beginPath();ctx.moveTo(150,250);ctx.quadraticCurveTo(80,230,60,160);ctx.lineTo(80,155);ctx.quadraticCurveTo(110,210,160,215);ctx.fill();ctx.stroke();});
+    ctx.lineWidth=18;ctx.strokeStyle=pc;ctx.beginPath();ctx.arc(455,260,58,-1.3,1.3);ctx.stroke();ctx.lineWidth=1;ctx.strokeStyle='rgba(0,0,0,.25)';
+    body(300,140,260,wf,[.2,.82],.5);ctx.beginPath();ctx.ellipse(300,152,92,18,0,0,Math.PI*2);ctx.fillStyle=pc;ctx.fill();ctx.stroke();ctx.beginPath();ctx.ellipse(300,135,18,12,0,0,Math.PI*2);ctx.fill();ctx.stroke();}
+  else if(k==='vase'){const wf=f=>120+190*Math.pow(Math.sin(Math.PI*Math.min(1,f*1.05)),1.4)+(f<.08?(.08-f)*900:0);body(300,40,440,wf,[.28,.86],.45);ctx.beginPath();ctx.ellipse(300,40,95,12,0,0,Math.PI*2);ctx.fillStyle='#e8e4dc';ctx.fill();ctx.strokeStyle='rgba(0,0,0,.25)';ctx.stroke();}
+  else if(k==='kettle'){const wf=f=>230+50*f;ctx.lineWidth=20;ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(420,170);ctx.bezierCurveTo(510,170,510,380,430,400);ctx.stroke();ctx.lineWidth=1;ctx.fillStyle=pc;ctx.strokeStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.moveTo(190,150);ctx.lineTo(140,120);ctx.lineTo(200,180);ctx.fill();ctx.stroke();body(300,140,300,wf,[.12,.9],.5);ctx.beginPath();ctx.ellipse(300,140,115,14,0,0,Math.PI*2);ctx.fill();ctx.stroke();}
+  else if(k==='cup'){const wf=f=>250-90*f;ctx.save();ctx.translate(330,110);ctx.rotate(.22);ctx.fillStyle='#f2b134';ctx.fillRect(-7,-90,14,120);ctx.restore();body(300,110,340,wf,[.03,.97],.5);ctx.beginPath();ctx.ellipse(300,106,132,26,0,Math.PI,0);ctx.fillStyle='rgba(235,240,246,.9)';ctx.fill();ctx.strokeStyle='rgba(0,0,0,.25)';ctx.stroke();}
+  else if(k==='glass'){const wf=f=>230-40*f;ctx.save();bodyPath(ctx,300,100,330,wf);ctx.fillStyle='rgba(220,232,240,.55)';ctx.fill();ctx.clip();ctx.globalAlpha=.95;wrapBody(ctx,img,300,100,330,wf,[.25,.8],.5);ctx.restore();shade(ctx,300,100,330,wf);ctx.strokeStyle='rgba(0,0,0,.25)';bodyPath(ctx,300,100,330,wf);ctx.stroke();}
+  else if(k==='plate'){sh(()=>{ctx.beginPath();ctx.ellipse(300,270,250,160,0,0,Math.PI*2);ctx.fillStyle=pc;ctx.fill();});ctx.save();ctx.beginPath();ctx.ellipse(300,270,236,151,0,0,Math.PI*2);ctx.clip();ctx.translate(300,270);ctx.scale(1,.64);ctx.drawImage(img,-236,-236,472,472);ctx.restore();ctx.strokeStyle='rgba(0,0,0,.15)';ctx.beginPath();ctx.ellipse(300,270,250,160,0,0,Math.PI*2);ctx.stroke();const g=ctx.createRadialGradient(240,200,10,300,270,260);g.addColorStop(0,'rgba(255,255,255,.35)');g.addColorStop(.5,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(0,0,0,.12)');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(300,270,250,160,0,0,Math.PI*2);ctx.fill();}
+  else if(k==='tshirt'||k==='tote'||k==='coat'){
+    ctx.beginPath();if(k==='tshirt'){ctx.moveTo(215,40);ctx.quadraticCurveTo(300,80,385,40);ctx.lineTo(520,95);ctx.lineTo(480,190);ctx.lineTo(430,170);ctx.lineTo(430,500);ctx.lineTo(170,500);ctx.lineTo(170,170);ctx.lineTo(120,190);ctx.lineTo(80,95);ctx.closePath();}
+    else if(k==='tote'){ctx.rect(150,150,300,340);ctx.moveTo(210,150);ctx.bezierCurveTo(210,40,280,40,280,150);ctx.moveTo(320,150);ctx.bezierCurveTo(320,40,390,40,390,150);}
+    else{ctx.moveTo(300,20);ctx.bezierCurveTo(240,20,225,70,230,105);ctx.lineTo(90,300);ctx.lineTo(135,330);ctx.lineTo(190,250);ctx.lineTo(150,510);ctx.lineTo(450,510);ctx.lineTo(410,250);ctx.lineTo(465,330);ctx.lineTo(510,300);ctx.lineTo(370,105);ctx.bezierCurveTo(375,70,360,20,300,20);ctx.closePath();}
+    sh(()=>{ctx.fillStyle=pc;ctx.strokeStyle=pc;ctx.lineWidth=k==='tote'?14:1;if(k==='tote'){ctx.stroke();}ctx.fill();});ctx.strokeStyle='rgba(0,0,0,.2)';ctx.lineWidth=1;ctx.stroke();
+    const a=k==='tshirt'?[205,130,190]:k==='tote'?[185,185,230]:[220,140,160];const dw=a[2],dh=dw*img.height/img.width;ctx.save();ctx.globalCompositeOperation='multiply';ctx.drawImage(img,a[0]+(190-dw)/2*0,a[1],dw,dh);ctx.restore();}
+  else if(k==='helmet'){const hp=()=>{ctx.beginPath();ctx.moveTo(60,380);ctx.bezierCurveTo(40,170,200,50,330,55);ctx.bezierCurveTo(480,60,560,170,550,300);ctx.lineTo(520,380);ctx.lineTo(430,395);ctx.lineTo(415,350);ctx.lineTo(110,395);ctx.closePath();};
+    sh(()=>{hp();ctx.fillStyle=pc;ctx.fill();});ctx.save();hp();ctx.clip();ctx.translate(270,235);ctx.rotate(-.07);const dw=260,dh=dw*img.height/img.width;ctx.drawImage(img,-dw/2,-dh/2,dw,dh);ctx.restore();
+    const g=ctx.createRadialGradient(260,140,10,300,220,320);g.addColorStop(0,'rgba(255,255,255,.4)');g.addColorStop(.45,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(0,0,0,.2)');hp();ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='rgba(0,0,0,.3)';ctx.stroke();}
+  else{ /* label / card / box: on a desk */
+    const ar=img.width/img.height,dw=k==='label'?280:k==='card'?400:330,dh=dw/ar;ctx.save();ctx.translate(300,260);ctx.rotate(-.06);sh(()=>{ctx.fillStyle='#fff';if(k==='label'){ctx.beginPath();ctx.arc(0,0,dw/2,0,Math.PI*2);ctx.fill();}else ctx.fillRect(-dw/2,-dh/2,dw,dh);});
+    if(k==='label'){ctx.beginPath();ctx.arc(0,0,dw/2,0,Math.PI*2);ctx.clip();}ctx.drawImage(img,-dw/2,-dh/2,dw,dh);ctx.restore();}
+  ctx.restore();
+}
+async function openMock(){
+  const url=renderRegion(Math.min(1200/W(),1200/H(),3),false);M.img=new Image();await new Promise(r=>{M.img.onload=r;M.img.src=url;});
+  $('mColor').value=({coat:'#2f7fc1',helmet:'#e9e3d6',tshirt:'#ffffff',tote:'#efe6d2'})[prod.mock]||'#ffffff';$('mockHint').textContent=prod.name+'. Ảnh vẽ minh họa; tải ảnh sản phẩm thật để ghép lên ảnh của anh.';
+  $('mock').hidden=false;drawMock();
+}
+$('bMock').onclick=openMock;$('mClose').onclick=()=>$('mock').hidden=true;$('mColor').oninput=drawMock;
+$('mPhoto').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{M.photo=im;$('mPhotoCtl').hidden=false;drawMock();};im.src=r.result;};r.readAsDataURL(f);e.target.value='';};
+$('mClear').onclick=()=>{M.photo=null;$('mPhotoCtl').hidden=true;drawMock();};
+[['mS','s',100],['mC','c',100],['mR','r',1]].forEach(([id,k,d])=>$(id).oninput=e=>{M[k]=+e.target.value/d;drawMock();});$('mMul').onchange=e=>{M.mul=e.target.checked;drawMock();};
+(()=>{const c=$('mcv');let dn=null;c.addEventListener('pointerdown',e=>{if(!M.photo)return;dn={x:e.clientX,y:e.clientY,mx:M.x,my:M.y};c.setPointerCapture(e.pointerId);});
+ c.addEventListener('pointermove',e=>{if(!dn)return;const r=c.getBoundingClientRect();M.x=dn.mx+(e.clientX-dn.x)/r.width;M.y=dn.my+(e.clientY-dn.y)/r.height;drawMock();});c.addEventListener('pointerup',()=>dn=null);})();
+$('mSave').onclick=()=>saveFile(`mockup-${prod.id}.png`,dataURLtoBlob($('mcv').toDataURL('image/png')));
+
+/* ================= AI ASSISTANT ================= */
+const AI={on:false,turns:[],ctl:null};
+const RULES=()=>`Bạn là "Trợ lý Thiết kế TVwin" — chuyên gia thiết kế in ấn, logo, quà tặng (gốm sứ, cốc, áo, túi, tem nhãn). Bạn điều khiển phần mềm thiết kế bằng các công cụ (tools) được cung cấp.
+ĐƠN VỊ: mm. Gốc tọa độ ở góc trên-trái trang. Trang hiện tại: ${prod.name}, ${prod.w}×${prod.h} mm, ${prod.shape==='circle'?'hình tròn, ':''}vùng an toàn cách mép ${prod.safe} mm, tràn lề ${prod.bleed} mm. Công nghệ in thường dùng: ${prod.tech}
+QUY TẮC:
+- Làm việc bằng cách GỌI CÔNG CỤ. Cần biết trang đang có gì thì gọi get_state trước. Đối tượng được chỉ định bằng id (ví dụ "o12"); "selection" = đối tượng đang chọn.
+- Giữ NGUYÊN VĂN chữ người dùng đưa, đúng dấu tiếng Việt. Không tự bịa số điện thoại, địa chỉ, giá, năm thành lập.
+- Không sao chép logo, tên hay nhận diện của thương hiệu khác.
+- Nội dung quan trọng nằm trong vùng an toàn; chữ cao tối thiểu 2,5 mm. Tối đa 3–4 màu; nếu in lụa thì ưu tiên 1–2 màu.
+- Muốn một thiết kế trọn bộ nhanh: dùng apply_style rồi tinh chỉnh. Muốn logo: make_logo. Có thể đổi sản phẩm bằng set_product (thiết kế được co giãn theo).
+- Phông có sẵn (đều có dấu tiếng Việt): ${FONTS.join(', ')}.
+- Phong cách: ${Object.entries(STYLES).map(([k,s])=>k+' = '+s.name).join('; ')}.
+- Mẫu logo: ${LOGOS.map(l=>l.id+' = '+l.name).join('; ')}.
+- Sản phẩm: ${PRODUCTS.map(p=>p.id+' = '+p.name).join('; ')}.
+TRẢ LỜI: ngắn gọn bằng tiếng Việt (1–3 câu): đã làm gì, và gợi ý một bước tiếp theo. Nếu yêu cầu không làm được bằng công cụ hiện có, nói rõ.`;
+const num={type:'number'};
+const TOOLDEFS=[
+ {name:'get_state',description:'Trả về sản phẩm, kích thước trang (mm), màu nền và danh sách đối tượng (id, loại, vị trí x,y,w,h mm, chữ, phông, màu).',run:()=>getState()},
+ {name:'set_product',description:'Đổi sản phẩm/khuôn in. Thiết kế hiện có được co giãn vào trang mới.',inputSchema:{type:'object',properties:{product:{type:'string',description:'id sản phẩm'}},required:['product']},run:a=>setProduct(String(a.product))},
+ {name:'apply_style',description:'Tạo trọn bộ thiết kế theo phong cách (thay thiết kế đang có). Trả về số đối tượng đã tạo.',inputSchema:{type:'object',properties:{style:{type:'string'},brand:{type:'string'},slogan:{type:'string'},sub:{type:'string'},c1:{type:'string',description:'màu chính hex, tùy chọn'},c2:{type:'string',description:'màu phụ hex, tùy chọn'}},required:['style','brand']},run:a=>applyStyle(String(a.style),{brand:a.brand,slogan:a.slogan||'',sub:a.sub||'',c1:a.c1,c2:a.c2})},
+ {name:'make_logo',description:'Chèn một logo vector vào giữa trang (nhóm có thể rã để sửa).',inputSchema:{type:'object',properties:{kind:{type:'string'},brand:{type:'string'},slogan:{type:'string'},font:{type:'string'},c1:{type:'string'},c2:{type:'string'}},required:['kind','brand']},run:a=>insertLogo(String(a.kind),{brand:a.brand,slogan:a.slogan||'',font:FONTS.includes(a.font)?a.font:'Playfair Display',c1:a.c1||'#1f3f8f',c2:a.c2||'#d9a33a'})},
+ {name:'add_text',description:'Thêm chữ. x,y là tâm (mm). curveRadius (mm) để uốn cong theo cung tròn; curvePosition top|bottom.',inputSchema:{type:'object',properties:{text:{type:'string'},x:num,y:num,fontSize:{type:'number',description:'chiều cao chữ mm'},fontFamily:{type:'string'},fill:{type:'string'},bold:{type:'boolean'},italic:{type:'boolean'},charSpacing:num,curveRadius:num,curvePosition:{type:'string'}},required:['text']},run:a=>addText(a)},
+ {name:'add_shape',description:'Thêm hình: rect, ellipse, polygon, star, line, lotus (hoa sen), cloud (mây), heart. x,y là tâm; w,h mm.',inputSchema:{type:'object',properties:{shape:{type:'string'},x:num,y:num,w:num,h:num,fill:{type:'string'},stroke:{type:'string'},strokeWidth:num,sides:num,radius:num},required:['shape']},run:a=>addShape(a)},
+ {name:'add_pattern',description:'Phủ họa tiết nền lặp lại toàn trang: dots, diamonds, stars, hearts, clouds, waves.',inputSchema:{type:'object',properties:{motif:{type:'string'},color:{type:'string'},density:num,opacity:num},required:['motif','color']},run:a=>{const g=pattern(String(a.motif),a.color,a.density||8,a.opacity??.3);g.id=nid();canvas.insertAt(g,1);canvas.requestRenderAll();save();return 'Đã thêm họa tiết '+g.id;}},
+ {name:'update_objects',description:'Sửa thuộc tính đối tượng. ids: mảng id, "selection" hoặc "all". props: fill, stroke, strokeWidth(mm), opacity(0-1), angle, text, fontFamily, fontSize(mm), fontWeight, fontStyle, textAlign, charSpacing, x,y (góc trên-trái mm), cx,cy (tâm mm), width,height (mm).',inputSchema:{type:'object',properties:{ids:{},props:{type:'object'}},required:['ids','props']},run:a=>setProps(findObjs(a.ids),a.props||{})},
+ {name:'recolor',description:'Đổi một màu thành màu khác trong các đối tượng (kể cả bên trong nhóm/logo). from bỏ trống = đổi mọi màu.',inputSchema:{type:'object',properties:{ids:{},from:{type:'string'},to:{type:'string'}},required:['to']},run:a=>{const os=findObjs(a.ids||'all');os.forEach(o=>recolorDeep(o,a.from?hex(a.from):null,a.to));canvas.requestRenderAll();save();return 'Đã đổi màu '+os.length+' đối tượng';}},
+ {name:'align',description:'Căn đối tượng. to: page|selection. h: left|center|right|none. v: top|middle|bottom|none.',inputSchema:{type:'object',properties:{ids:{},to:{type:'string'},h:{type:'string'},v:{type:'string'}}},run:a=>alignObjs(findObjs(a.ids),a.h,a.v,a.to||'page')},
+ {name:'arrange',description:'Thao tác: front, back, forward, backward, delete, duplicate, group, ungroup, flipX, flipY, lock, unlock.',inputSchema:{type:'object',properties:{ids:{},action:{type:'string'}},required:['action']},run:a=>{const os=findObjs(a.ids);if(a.action==='group'&&os.length>1){canvas.setActiveObject(new fabric.ActiveSelection(os,{canvas}));}return arrange(os,String(a.action));}},
+ {name:'select',description:'Chọn đối tượng theo id để người dùng thấy.',inputSchema:{type:'object',properties:{ids:{}}},run:a=>{const os=findObjs(a.ids);canvas.discardActiveObject();if(os.length)canvas.setActiveObject(os.length>1?new fabric.ActiveSelection(os,{canvas}):os[0]);canvas.requestRenderAll();return 'Đã chọn '+os.length;}},
+ {name:'set_page',description:'Đổi màu nền trang.',inputSchema:{type:'object',properties:{color:{type:'string'}},required:['color']},run:a=>{board.set('fill',a.color);canvas.requestRenderAll();save();return 'Đã đổi nền';}},
+ {name:'apply_palette',description:'Áp bảng phối màu có sẵn cho cả thiết kế: '+PALETTES.map((p,i)=>i+'='+p[0]).join('; '),inputSchema:{type:'object',properties:{index:num},required:['index']},run:a=>{buildColorPanel();const b=$('d-color').querySelector(`[data-p="${+a.index}"]`);if(!b)return 'Không có bảng màu';b.click();return 'Đã áp bảng màu '+PALETTES[+a.index][0];}},
+ {name:'check_print',description:'Chạy kiểm tra file in (cỡ chữ, vùng an toàn, ppi ảnh, số màu).',run:()=>checks().map(x=>x[0]+': '+x[1])}
+];
+function runTool(name,args){const t=TOOLDEFS.find(t=>t.name===name);if(!t)throw new Error('Không có công cụ '+name);const r=t.run(args||{});refreshAll();return r;}
+function addMsg(role,text,acts){const d=document.createElement('div');d.className='msg '+role;d.textContent=text;if(acts&&acts.length){const a=document.createElement('div');a.className='acts';a.textContent='⚙ '+acts.join(' · ');d.appendChild(a);}$('msgs').appendChild(d);$('msgs').scrollTop=1e9;return d;}
+const CHIPS=['Thiết kế bộ ấm chén men lam cho thương hiệu "Gốm Việt", khẩu hiệu "Tinh hoa đất Việt"','Làm logo huy hiệu tròn cho "Trà Sữa Mây", màu tím và vàng','Đổi toàn bộ chữ sang phông Playfair Display, màu vàng đồng','Kiểm tra file và sửa những chỗ chưa đạt'];
+$('chips').innerHTML=CHIPS.map(c=>`<button>${c}</button>`).join('');$('chips').onclick=e=>{const b=e.target.closest('button');if(b){$('aiIn').value=b.textContent;send();}};
+AI.imgs=[];
+async function shrink(file){const url=await new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(file);});const im=await toImg(url);const k=Math.min(1,1400/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.85);}
+$('aiFile').onchange=async e=>{for(const f of [...e.target.files].slice(0,3))AI.imgs.push(await shrink(f));AI.imgs=AI.imgs.slice(-3);$('aiImgs').textContent=AI.imgs.length?`📎 ${AI.imgs.length} ảnh sẽ gửi kèm · `:'';if(AI.imgs.length){const x=document.createElement('a');x.href='#';x.textContent='bỏ ảnh';x.onclick=ev=>{ev.preventDefault();AI.imgs=[];$('aiImgs').textContent='';};$('aiImgs').appendChild(x);}e.target.value='';};
+async function send(){
+  const text=$('aiIn').value.trim();if(!text||AI.ctl)return;$('aiIn').value='';addMsg('u',text+(AI.imgs.length?`  [${AI.imgs.length} ảnh]`:''));
+  if(!AI.on){addMsg('a',offline(text));return;}
+  AI.turns.push({role:'user',content:text});const bubble=addMsg('a','Đang suy nghĩ…'),acts=[];AI.ctl=new AbortController();$('aiSend').hidden=true;$('aiStop').hidden=false;
+  const imgs=AI.imgs.slice();AI.imgs=[];$('aiImgs').textContent='';
+  try{
+    const tools=TOOLDEFS.filter(t=>t.name!=='get_state').map(t=>({name:t.name,description:t.description,params:t.inputSchema?t.inputSchema.properties:undefined}));
+    const r=await fetch(CFG.WORKER_URL,{method:'POST',signal:AI.ctl.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({rules:RULES(),state:getState(),tools,messages:AI.turns.slice(-12),images:imgs})});
+    const d=await r.json();
+    if(!d.ok){bubble.textContent=(d.error||'Lỗi AI')+(d.kind==='quota'?' Có thể dùng lệnh cơ bản trong lúc chờ.':'');AI.turns.pop();return;}
+    for(const x of d.actions||[]){try{runTool(x.tool,x.args);acts.push(x.tool);}catch(e){acts.push(x.tool+' ✗');}}
+    bubble.textContent=d.reply||'Đã xong.';
+    if(acts.length){const a=document.createElement('div');a.className='acts';a.textContent='⚙ '+acts.join(' · ');bubble.appendChild(a);}
+    AI.turns.push({role:'assistant',content:(d.reply||'')+(acts.length?' [đã làm: '+acts.join(', ')+']':'')});
+  }catch(e){bubble.textContent=e&&e.name==='AbortError'?'Đã dừng.':'Không kết nối được máy chủ AI. Kiểm tra mạng rồi thử lại.';AI.turns.pop();}
+  finally{AI.ctl=null;$('aiSend').hidden=false;$('aiStop').hidden=true;save();}
+}
+$('aiSend').onclick=send;$('aiStop').onclick=()=>AI.ctl&&AI.ctl.abort();
+$('aiIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+const CNAMES={'đỏ':'#c62828','đỏ son':'#a3271f','xanh dương':'#1e5bb8','xanh lam':'#1f3f8f','lam':'#1f3f8f','navy':'#13294b','xanh lá':'#2e7d32','vàng':'#f2b134','vàng đồng':'#c8a24a','cam':'#ff5d02','tím':'#7a3e9d','hồng':'#e86a8c','đen':'#111111','trắng':'#ffffff','nâu':'#5a3e2b','xám':'#7a8394','kem':'#f7f3e8'};
+function colorFrom(s){const h=s.match(/#[0-9a-f]{6}/i);if(h)return h[0];const k=Object.keys(CNAMES).sort((a,b)=>b.length-a.length).find(k=>s.includes(k));return k?CNAMES[k]:null;}
+function offline(t){
+  const s=t.toLowerCase(),q=t.match(/["“](.+?)["”]/),acts=[];
+  const st=Object.entries({sangtrong:'sang trọng',truyenthong:'truyền thống',menlam:'men lam',toigian:'tối giản',dethuong:'dễ thương',vintage:'cổ điển'}).find(([k,v])=>s.includes(v));
+  const pr=[['teapot','ấm chén'],['teapot','ấm trà'],['teacup','chén'],['vase','bình hoa'],['kettle','bình nước'],['plate','đĩa'],['milktea','trà sữa'],['mug','cốc sứ'],['tshirt','áo thun'],['tote','túi'],['coat','áo mưa'],['helmet','mũ bảo hiểm'],['card','danh thiếp'],['label','tem']].find(([k,v])=>s.includes(v));
+  if(pr&&!s.includes('logo')){setProduct(pr[0]);acts.push('set_product');}
+  if(st){applyStyle(st[0],{brand:q?q[1]:'Thương hiệu',slogan:(t.match(/khẩu hiệu\s*["“](.+?)["”]/i)||[])[1]||''});acts.push('apply_style');}
+  else if(s.includes('logo')){const kind=s.includes('khiên')?'shield':s.includes('sen')?'lotus':s.includes('lục giác')?'hex':s.includes('chữ ký')?'script':s.includes('tem')?'stamp':'badge';insertLogo(kind,{brand:q?q[1]:'Thương hiệu',slogan:'',font:'Playfair Display',c1:colorFrom(s)||'#1f3f8f',c2:'#d9a33a'});save();acts.push('make_logo');}
+  else if(s.includes('nền')&&colorFrom(s)){board.set('fill',colorFrom(s));canvas.requestRenderAll();save();acts.push('set_page');}
+  else if(s.includes('thêm chữ')&&q){addText({text:q[1]});acts.push('add_text');}
+  else if(s.includes('căn giữa')){alignObjs(canvas.getActiveObjects().length?canvas.getActiveObjects():userObjs(),'center','middle','page');acts.push('align');}
+  else if(s.includes('kiểm tra')){setDock('check');acts.push('check_print');}
+  else if((s.includes('màu')||s.includes('đổi'))&&colorFrom(s)){const os=canvas.getActiveObjects().length?canvas.getActiveObjects():userObjs().filter(o=>o.text!=null);setProps(os,{fill:colorFrom(s)});acts.push('update_objects');}
+  refreshAll();
+  return acts.length?'Đã làm: '+acts.join(' → ')+'.\n(Chế độ lệnh cơ bản.)':'Chế độ lệnh cơ bản chỉ hiểu vài câu: "phong cách men lam “Tên”", "logo huy hiệu “Tên”", "nền màu đỏ", "thêm chữ “…”", "căn giữa", "kiểm tra". Khi máy chủ AI hoạt động, trợ lý hiểu yêu cầu tự do.';
+}
+async function initAI(){
+  if(!CFG.WORKER_URL){AI.on=false;$('aiMode').textContent='Chế độ lệnh cơ bản (chưa cấu hình máy chủ AI)';addMsg('sys','Chưa cấu hình máy chủ AI. Trợ lý hiểu vài lệnh cơ bản.');return;}
+  try{const r=await fetch(CFG.WORKER_URL,{method:'GET'});const d=await r.json();AI.on=!!d.configured;$('aiMode').textContent=AI.on?'Gemini · điều khiển công cụ trên trang':'Máy chủ AI chưa có khóa Gemini — đang dùng lệnh cơ bản';}
+  catch(e){AI.on=false;$('aiMode').textContent='Không kết nối được máy chủ AI — dùng lệnh cơ bản';}
+}
+
+/* ================= PDF / IMPOSITION / BATCH ================= */
+const PT=72/25.4;
+const ascii=t=>String(t).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').replace(/[^\x20-\x7e]/g,'');
+function u8(url){const b=atob(url.split(',')[1]);const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
+async function finalPNG(mult){let url=renderRegion(mult,true);
+  if(prod.shape==='circle'){const im=new Image();await new Promise(r=>{im.onload=r;im.src=url;});const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const x=c.getContext('2d');x.drawImage(im,0,0);x.globalCompositeOperation='destination-in';x.beginPath();x.arc(c.width/2,c.height/2,c.width/2,0,Math.PI*2);x.fill();url=c.toDataURL('image/png');}
+  return url;}
+const itemMM=()=>({w:prod.w+2*(prod.bleed||0),h:prod.h+2*(prod.bleed||0),b:prod.bleed||0});
+function needPDF(){if(!window.PDFLib){toast('Chưa tải được thư viện PDF — kiểm tra mạng rồi tải lại trang');return false;}return true;}
+async function exportPDF(){
+  if(!needPDF())return;const {PDFDocument}=PDFLib,doc=await PDFDocument.create();doc.setTitle(ascii(prod.name));doc.setCreator('TVwin Xuong Thiet Ke Studio');
+  const m=itemMM(),img=await doc.embedPng(u8(await finalPNG(300/25.4/S))),w=m.w*PT,h=m.h*PT,b=m.b*PT,pg=doc.addPage([w,h]);
+  pg.drawImage(img,{x:0,y:0,width:w,height:h});pg.setBleedBox(0,0,w,h);pg.setTrimBox(b,b,w-2*b,h-2*b);
+  await saveFile(fname('pdf'),new Blob([await doc.save()],{type:'application/pdf'}));
+}
+$('bPdf').onclick=exportPDF;
+/* imposition state: items = array of dataURLs (1 = same design repeated) */
+const IMP={items:null,thumbs:null,label:''};
+function sheetMM(){const v=$('iSheet').value;if(v==='custom')return[Math.max(20,+$('iCW').value||0),Math.max(20,+$('iCH').value||0)];return v.split('x').map(Number);}
+function impLayout(){
+  const [SW,SH]=sheetMM(),m=itemMM(),mg=Math.max(0,+$('iM').value||0),gp=Math.max(0,+$('iG').value||0),uw=SW-2*mg,uh=SH-2*mg;
+  const fit=(w,h)=>({c:Math.max(0,Math.floor((uw+gp)/(w+gp))),r:Math.max(0,Math.floor((uh+gp)/(h+gp))),w,h});
+  const a=fit(m.w,m.h),b=fit(m.h,m.w),rot=b.c*b.r>a.c*a.r,L=rot?b:a,per=L.c*L.r;
+  const total=IMP.items&&IMP.items.length>1?IMP.items.length:Math.max(1,+$('iQ').value||1);
+  const tw=L.c*L.w+Math.max(0,L.c-1)*gp,th=L.r*L.h+Math.max(0,L.r-1)*gp;
+  const slots=[];for(let r=0;r<L.r;r++)for(let c=0;c<L.c;c++)slots.push({x:(SW-tw)/2+c*(L.w+gp),y:(SH-th)/2+r*(L.h+gp)});
+  return{SW,SH,mg,gp,rot,per,slots,sheets:per?Math.ceil(total/per):0,total,m,cover:per*m.w*m.h/(SW*SH)*100};
+}
+function cropMarks(draw,s,L){const m=L.m,iw=L.rot?m.h:m.w,ih=L.rot?m.w:m.h,b=m.b,x0=s.x+b,y0=s.y+b,x1=s.x+iw-b,y1=s.y+ih-b,len=3,off=b+.8;
+  [[x0,y0,-1,-1],[x1,y0,1,-1],[x0,y1,-1,1],[x1,y1,1,1]].forEach(([x,y,dx,dy])=>{draw(x+dx*off,y,x+dx*(off+len),y);draw(x,y+dy*off,x,y+dy*(off+len));});}
+async function impPreview(){
+  const L=impLayout(),c=$('icv'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+  const k=Math.min((c.width-40)/L.SW,(c.height-40)/L.SH),ox=(c.width-L.SW*k)/2,oy=(c.height-L.SH*k)/2;
+  ctx.save();ctx.translate(ox,oy);ctx.scale(k,k);ctx.shadowColor='rgba(0,0,0,.2)';ctx.shadowBlur=12;ctx.fillStyle='#fff';ctx.fillRect(0,0,L.SW,L.SH);ctx.shadowBlur=0;
+  ctx.strokeStyle='#c9d1df';ctx.lineWidth=.4;ctx.setLineDash([2,2]);ctx.strokeRect(L.mg,L.mg,L.SW-2*L.mg,L.SH-2*L.mg);ctx.setLineDash([]);
+  const imgs=IMP.thumbs||[];
+  L.slots.forEach((s,i)=>{const im=imgs.length>1?imgs[i]:imgs[0];if(!im||(imgs.length>1&&i>=imgs.length))return;const iw=L.rot?L.m.h:L.m.w,ih=L.rot?L.m.w:L.m.h;
+    ctx.save();ctx.translate(s.x+iw/2,s.y+ih/2);if(L.rot)ctx.rotate(-Math.PI/2);ctx.drawImage(im,-L.m.w/2,-L.m.h/2,L.m.w,L.m.h);ctx.restore();
+    if($('iMarks').checked){ctx.strokeStyle='#000';ctx.lineWidth=.2;ctx.beginPath();cropMarks((a,b,c2,d)=>{ctx.moveTo(a,b);ctx.lineTo(c2,d);},s,L);ctx.stroke();}});
+  ctx.fillStyle='#3a4357';ctx.font='3.4px "JetBrains Mono", monospace';ctx.fillText(ascii(`TVwin · ${prod.name} · ${L.per} ban/to · ${L.SW}x${L.SH} mm`),L.mg,Math.max(3,L.mg/2+1));ctx.restore();
+  $('iStats').innerHTML=`<div><span>Bản / tờ</span><b>${L.per}</b></div><div><span>Số tờ</span><b>${L.per?L.sheets.toLocaleString('vi-VN'):'—'}</b></div><div><span>Phủ giấy</span><b>${L.cover.toFixed(0)}%</b></div><div><span>Xoay</span><b>${L.rot?'90°':'Không'}</b></div>`;
+  $('iProg').textContent=L.per?'':'Khổ nhỏ hơn sản phẩm. Chọn khổ lớn hơn hoặc giảm lề kẹp.';
+}
+async function toImg(url){const im=new Image();await new Promise(r=>{im.onload=r;im.src=url;});return im;}
+async function openImp(items){
+  IMP.items=items||[await finalPNG(Math.min(1,1200/W()))];IMP.thumbs=await Promise.all(IMP.items.map(toImg));
+  $('iQtyWrap').hidden=IMP.items.length>1;$('impSrc').textContent=IMP.items.length>1?`${IMP.items.length} bản khác nhau (in tên hàng loạt) · ${prod.name}`:`${prod.name} · ${itemMM().w} × ${itemMM().h} mm kể cả tràn lề`;
+  $('imp').hidden=false;impPreview();
+}
+['iSheet','iM','iG','iQ','iMarks','iCW','iCH'].forEach(id=>$(id).addEventListener('input',()=>{$('iCustom').hidden=$('iSheet').value!=='custom';impPreview();}));
+$('bImp').onclick=()=>openImp(null);$('iClose').onclick=()=>$('imp').hidden=true;
+$('iPdf').onclick=async()=>{
+  if(!needPDF())return;const L=impLayout();if(!L.per){toast('Khổ in nhỏ hơn sản phẩm');return;}
+  $('iPdf').disabled=true;$('iProg').textContent='Đang dựng file 300 ppi…';
+  try{
+    const {PDFDocument,rgb,degrees,StandardFonts}=PDFLib,doc=await PDFDocument.create();doc.setCreator('TVwin Xuong Thiet Ke Studio');const font=await doc.embedFont(StandardFonts.Helvetica);
+    let srcs=IMP.items;if(srcs.length===1)srcs=[await finalPNG(300/25.4/S)];
+    const emb=[];for(let i=0;i<srcs.length;i++){emb.push(await doc.embedPng(u8(srcs[i])));if(i%5===0){$('iProg').textContent=`Đang nhúng hình ${i+1}/${srcs.length}…`;await new Promise(r=>setTimeout(r));}}
+    const m=L.m,H=L.SH*PT;let n=0;
+    for(let sh=0;sh<L.sheets;sh++){const pg=doc.addPage([L.SW*PT,H]);
+      for(let i=0;i<L.slots.length&&n<L.total;i++,n++){const s=L.slots[i],img=emb.length>1?emb[n]:emb[0];
+        if(L.rot)pg.drawImage(img,{x:(s.x+m.h)*PT,y:H-(s.y+m.w)*PT,width:m.w*PT,height:m.h*PT,rotate:degrees(90)});
+        else pg.drawImage(img,{x:s.x*PT,y:H-(s.y+m.h)*PT,width:m.w*PT,height:m.h*PT});
+        if($('iMarks').checked)cropMarks((a,b,c2,d)=>pg.drawLine({start:{x:a*PT,y:H-b*PT},end:{x:c2*PT,y:H-d*PT},thickness:.25,color:rgb(0,0,0)}),s,L);}
+      pg.drawText(ascii(`TVwin | ${prod.name} | to ${sh+1}/${L.sheets} | ${L.per} ban/to | ${L.SW}x${L.SH} mm`),{x:L.mg*PT,y:H-Math.max(4,L.mg*.6)*PT,size:6,font,color:rgb(.25,.28,.35)});}
+    await saveFile(`kho-in-${prod.id}-${L.SW}x${L.SH}.pdf`,new Blob([await doc.save()],{type:'application/pdf'}));$('iProg').textContent=`Xong: ${L.sheets} tờ, ${L.total} bản.`;
+  }catch(e){$('iProg').textContent='Lỗi khi tạo PDF: '+(e&&e.message||e);}finally{$('iPdf').disabled=false;}
+};
+/* batch personalization */
+const BATCH={t:null};
+function batchTarget(){const a=canvas.getActiveObject();if(a&&a.type==='i-text')return a;return userObjs().find(o=>o.type==='i-text'&&/\{t[eê]n\}/i.test(o.text))||null;}
+function batchNames(){return $('bNames').value.split('\n').map(x=>x.trim()).filter(Boolean);}
+function batchInfo(){const n=batchNames(),dup=n.length-new Set(n.map(x=>x.toLowerCase())).size;$('bInfo').textContent=`${n.length} dòng${dup?` · ${dup} tên trùng (vẫn in đủ, mỗi bản một mã)`:''}`;}
+function applyName(t,orig,name){const txt=/\{t[eê]n\}/i.test(orig.text)?orig.text.replace(/\{t[eê]n\}/ig,name):name;t.set({text:txt,scaleX:orig.scaleX,scaleY:orig.scaleY});t.initDimensions();
+  if($('bFit').checked){const maxW=orig.w;if(t.width*orig.scaleX>maxW){t.set('scaleX',maxW/t.width);}}t.setCoords();}
+async function batchRender(names,mult,onStep){const t=BATCH.t,orig={text:t.text,scaleX:t.scaleX,scaleY:t.scaleY,w:Math.max(t.width*t.scaleX,1)},out=[];restoring=true;
+  try{for(let i=0;i<names.length;i++){applyName(t,orig,names[i]);canvas.renderAll();out.push(await finalPNG(mult));if(onStep)onStep(i);if(i%3===0)await new Promise(r=>setTimeout(r));}}
+  finally{t.set({text:orig.text,scaleX:orig.scaleX,scaleY:orig.scaleY});t.initDimensions();t.setCoords();canvas.renderAll();restoring=false;}return out;}
+async function batchPreview(){const c=$('bcv'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);const n=batchNames().slice(0,6);if(!BATCH.t||!n.length)return;
+  const ims=await Promise.all((await batchRender(n,Math.min(.6,500/W()))).map(toImg));const cols=n.length>3?3:n.length,rows=Math.ceil(n.length/cols),cw=c.width/cols-20,chh=c.height/rows-20;
+  ims.forEach((im,i)=>{const k=Math.min(cw/im.width,chh/im.height),w=im.width*k,h=im.height*k,x=(i%cols)*(c.width/cols)+(c.width/cols-w)/2,y=Math.floor(i/cols)*(c.height/rows)+(c.height/rows-h)/2;ctx.shadowColor='rgba(0,0,0,.2)';ctx.shadowBlur=10;ctx.drawImage(im,x,y,w,h);ctx.shadowBlur=0;});}
+$('bBatch').onclick=()=>{BATCH.t=batchTarget();$('bTarget').innerHTML=BATCH.t?`Thay chữ: <b>“${BATCH.t.text.slice(0,40).replace(/</g,'&lt;')}”</b>`:'<span style="color:var(--bad)">Chưa chọn dòng chữ. Đóng lại, bấm chọn dòng chữ cần thay tên trên trang, rồi mở lại.</span>';
+  ['bPdfOut','bToImp'].forEach(id=>$(id).disabled=!BATCH.t);batchInfo();$('batch').hidden=false;batchPreview();};
+let bT=0;$('bNames').addEventListener('input',()=>{batchInfo();clearTimeout(bT);bT=setTimeout(batchPreview,500);});$('bFit').onchange=batchPreview;
+$('bClose').onclick=()=>$('batch').hidden=true;
+$('bPdfOut').onclick=async()=>{if(!needPDF())return;const names=batchNames();if(!names.length)return;$('bPdfOut').disabled=true;
+  try{const imgs=await batchRender(names,300/25.4/S,i=>$('bProg').textContent=`Đang dựng ${i+1}/${names.length}…`);
+    const {PDFDocument}=PDFLib,doc=await PDFDocument.create(),m=itemMM();
+    for(const u of imgs){const img=await doc.embedPng(u8(u)),pg=doc.addPage([m.w*PT,m.h*PT]);pg.drawImage(img,{x:0,y:0,width:m.w*PT,height:m.h*PT});pg.setTrimBox(m.b*PT,m.b*PT,(m.w-2*m.b)*PT,(m.h-2*m.b)*PT);}
+    await saveFile(`in-ten-${prod.id}-${names.length}-ban.pdf`,new Blob([await doc.save()],{type:'application/pdf'}));$('bProg').textContent=`Xong ${names.length} trang, theo đúng thứ tự danh sách.`;
+  }catch(e){$('bProg').textContent='Lỗi: '+(e&&e.message||e);}finally{$('bPdfOut').disabled=false;}};
+$('bToImp').onclick=async()=>{const names=batchNames();if(!names.length)return;$('bProg').textContent='Đang dựng các bản…';const imgs=await batchRender(names,300/25.4/S,i=>$('bProg').textContent=`Đang dựng ${i+1}/${names.length}…`);$('bProg').textContent='';$('batch').hidden=true;openImp(imgs);};
+
+/* ================= DỰ ÁN ĐÁM MÂY (Supabase) + BẢN NHÁP ================= */
+const CLOUD={sb:null,user:null,pid:null};
+function initCloud(){try{if(window.supabase&&/^https:/.test(CFG.SUPABASE_URL)){CLOUD.sb=window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY);CLOUD.sb.auth.getSession().then(({data})=>{CLOUD.user=data.session?data.session.user:null;authUI();});CLOUD.sb.auth.onAuthStateChange((_e,ss)=>{CLOUD.user=ss?ss.user:null;authUI();});}}catch(e){CLOUD.sb=null;}authUI();}
+function authUI(){const on=!!CLOUD.user;$('pAuth').hidden=on||!CLOUD.sb;$('pMain').hidden=!on;$('pWho').textContent=on?CLOUD.user.email:'';
+  $('pState').textContent=!CLOUD.sb?'Chưa cấu hình lưu đám mây. Dùng "Lưu file" ở chế độ Nâng cao.':on?'Đã đăng nhập. Dự án chỉ tài khoản này xem được.':'Đăng nhập để lưu và mở dự án ở mọi máy.';if(on&&!$('proj').hidden)cloudList();}
+async function doAuth(signup){const email=$('pEmail').value.trim(),pw=$('pPw').value;if(!email||pw.length<6){$('pProg').textContent='Nhập email và mật khẩu từ 6 ký tự.';return;}
+  $('pProg').textContent=signup?'Đang tạo tài khoản…':'Đang đăng nhập…';
+  const r=signup?await CLOUD.sb.auth.signUp({email,password:pw}):await CLOUD.sb.auth.signInWithPassword({email,password:pw});
+  if(r.error){$('pProg').textContent=({'Invalid login credentials':'Sai email hoặc mật khẩu.','Email not confirmed':'Email chưa xác nhận — mở hộp thư để bấm link xác nhận.','User already registered':'Email này đã có tài khoản, hãy đăng nhập.'})[r.error.message]||('Lỗi: '+r.error.message);return;}
+  $('pProg').textContent=signup&&!r.data.session?'Đã tạo tài khoản. Mở email để xác nhận rồi đăng nhập.':'';$('pPw').value='';}
+const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function cloudList(){
+  const {data,error}=await CLOUD.sb.from('xtk_projects').select('id,name,prod_name,size,updated_at').order('updated_at',{ascending:false}).limit(100);
+  if(error){$('pList').innerHTML=`<div class="hint">Không đọc được danh sách: ${esc(error.message)}</div>`;return;}
+  $('pList').innerHTML=data.length?data.map(v=>`<div class="prow"><div><b>${esc(v.name||'Không tên')}</b><span>${esc(v.prod_name)} · ${new Date(v.updated_at).toLocaleString('vi-VN')} · ${Math.round((v.size||0)/1024)} KB</span></div><button class="btn" data-open="${v.id}">Mở</button><button class="btn" data-del="${v.id}">Xóa</button></div>`).join(''):'<div class="hint">Chưa có dự án nào.</div>';
+  $('pList').querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>cloudOpen(b.dataset.open));
+  $('pList').querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='Chắc chắn xóa?';b.style.color='var(--bad)';setTimeout(()=>{b.dataset.sure='';b.textContent='Xóa';b.style.color='';},3000);return;}
+    const {error}=await CLOUD.sb.from('xtk_projects').delete().eq('id',b.dataset.del);if(error)toast('Không xóa được');else{if(CLOUD.pid===b.dataset.del)CLOUD.pid=null;toast('Đã xóa dự án');cloudList();}});
+}
+async function cloudSave(){
+  const name=$('pName').value.trim()||prod.name,data=snapshot();if(data.length>20e6){$('pProg').textContent='Dự án quá lớn (ảnh nặng). Giảm ảnh rồi lưu lại.';return;}
+  $('pSave').disabled=true;$('pProg').textContent='Đang lưu…';
+  const row={name,prod:prod.id,prod_name:prod.name,data,size:data.length,updated_at:new Date().toISOString()};
+  const q=CLOUD.pid?CLOUD.sb.from('xtk_projects').update(row).eq('id',CLOUD.pid).select('id'):CLOUD.sb.from('xtk_projects').insert(row).select('id');
+  const {data:res,error}=await q;$('pSave').disabled=false;
+  if(error||!res||!res.length){$('pProg').textContent='Không lưu được: '+(error?error.message:'không có quyền');return;}
+  CLOUD.pid=res[0].id;$('pProg').textContent='Đã lưu “'+name+'”.';toast('Đã lưu lên đám mây');cloudList();
+}
+async function cloudOpen(id){$('pProg').textContent='Đang tải…';const {data,error}=await CLOUD.sb.from('xtk_projects').select('id,name,data').eq('id',id).single();
+  if(error||!data){$('pProg').textContent='Không mở được dự án.';return;}loadState(data.data,()=>{fitPage();save();});CLOUD.pid=data.id;$('pName').value=data.name||'';$('pProg').textContent='';$('proj').hidden=true;toast('Đã mở “'+(data.name||'')+'”');}
+$('bCloud').onclick=()=>{$('proj').hidden=false;$('pProg').textContent='';authUI();};$('pSave').onclick=cloudSave;$('pClose').onclick=()=>$('proj').hidden=true;
+$('pLogin').onclick=()=>doAuth(false);$('pSignup').onclick=()=>doAuth(true);$('pOut').onclick=async()=>{await CLOUD.sb.auth.signOut();CLOUD.pid=null;};
+$('pNew').onclick=()=>{CLOUD.pid=null;$('pName').value='Dự án mới';$('pProg').textContent='Lần lưu tới sẽ tạo dự án mới.';};
+let draftT=0;function saveDraft(){clearTimeout(draftT);draftT=setTimeout(()=>{try{localStorage.setItem('tvwin-studio-draft',snapshot());}catch(e){}},1500);}
+canvas.on('object:modified',saveDraft);canvas.on('object:added',saveDraft);canvas.on('object:removed',saveDraft);
+/* easy / advanced mode */
+function setMode(easy){document.body.classList.toggle('easy',easy);$('bMode').textContent='Chế độ: '+(easy?'Dễ dùng':'Nâng cao');try{localStorage.setItem('tvwin-studio-mode',easy?'easy':'adv');}catch(e){}if(easy&&['polygon','star','line','pen','hand'].includes(tool))setTool('select');}
+$('bMode').onclick=()=>setMode(!document.body.classList.contains('easy'));
+try{if(localStorage.getItem('tvwin-studio-mode')==='easy')setMode(true);}catch(e){}
+
+/* ================= INIT ================= */
+buildTools();buildStylePanel();buildLogoPanel();
+makeBoard('#ffffff');
+document.fonts.ready.then(()=>{});
+const FL=FONTS.flatMap(f=>[`400 24px "${f}"`,`700 24px "${f}"`]);
+Promise.allSettled(FL.map(f=>document.fonts.load(f,'Gốm Việt ẩẻễ'))).then(()=>{
+  let dr=null;try{dr=localStorage.getItem('tvwin-studio-draft');}catch(e){}
+  if(!userObjs().length&&dr){try{loadState(dr,()=>{fitPage();hist=[];hIdx=-1;save();toast('Đã mở lại bản nháp gần nhất');});return;}catch(e){}}
+  if(!userObjs().length){applyStyle('menlam',{brand:'Gốm Việt',slogan:'Tinh hoa đất Việt'});hist=[];hIdx=-1;save();}
+  else{canvas.getObjects().forEach(o=>eachDeep(o,c=>{if(c.initDimensions)c.initDimensions();}));canvas.requestRenderAll();}
+  refreshAll();
+});
+setTimeout(()=>{if(!userObjs().length){applyStyle('menlam',{brand:'Gốm Việt',slogan:'Tinh hoa đất Việt'});refreshAll();}},2500);
+refreshAll();initAI();CFG_READY.then(initCloud);
+addMsg('a','Chào anh! Em là Trợ lý Thiết kế. Anh có thể nhờ em: chọn sản phẩm, tạo mẫu theo phong cách, làm logo, đổi màu/phông, căn chỉnh, kiểm tra file in. Ví dụ bấm một gợi ý bên dưới.');
+</script>
+
+</body>
+</html>
